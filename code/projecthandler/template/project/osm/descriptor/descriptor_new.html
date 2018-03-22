@@ -53,21 +53,7 @@ Create new {{ descriptor_type }} descriptor
 
 <div class="tab-pane active" id="upload">
 
-    <!-- Standar Form -->
-    <h4>Select package from your computer</h4>
-    <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
-        <div class="form-inline">
-            {% csrf_token %}
-            <div class="form-group">
-                <input type="file" name="file" id="js-upload-files">
-            </div>
-            <button onclick="create(this.id)" class="btn btn-xs btn-primary" id="js-upload-submit"><i
-            class="fa fa-upload"></i> Onboard</button>
-        </div>
-    </form>
-
-    <!-- Drop Zone -->
-    <h4>Or drag and drop file below</h4>
+    <h4>Drag and drop file below</h4>
     <div class="upload-drop-zone" id="drop-zone">
             Just drag and drop files here
     </div>
