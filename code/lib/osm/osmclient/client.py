@@ -33,7 +33,7 @@ class Client(object):
         postfields_dict = {'username': self._user,
                            'password': self._password,
                            'project-id': self._project}
-        token = self._send_post('https://40.86.191.138:9999/osm/token/v1', None, postfields_dict, headers={"Content-Type": "application/yaml", "accept": "application/json"})
+        token = self._send_post('https://192.168.100.212:9999/osm/token/v1', None, postfields_dict, headers={"Content-Type": "application/yaml", "accept": "application/json"})
         if token is not None:
             return token['id']
         return None
@@ -44,7 +44,7 @@ class Client(object):
             self._headers['Authorization'] = 'Bearer {}'.format(token)
             self._headers['Content-Type'] = 'application/yaml'
             self._headers['accept'] = 'application/json'
-            return self._send_get("https://40.86.191.138:9999/osm/nsd/v1/ns_descriptors", headers=self._headers)
+            return self._send_get("https://192.168.100.212:9999/osm/nsd/v1/ns_descriptors", headers=self._headers)
         return None
 
     def nsd_get(self, id):
@@ -53,7 +53,7 @@ class Client(object):
             self._headers['Authorization'] = 'Bearer {}'.format(token)
             self._headers['Content-Type'] = 'application/yaml'
             self._headers['accept'] = 'application/json'
-            return self._send_get("https://40.86.191.138:9999/osm/nsd/v1/ns_descriptors/{}".format(id), headers=self._headers)
+            return self._send_get("https://192.168.100.212:9999/osm/nsd/v1/ns_descriptors/{}".format(id), headers=self._headers)
         return None
 
     def nsd_delete(self, id):
@@ -62,7 +62,7 @@ class Client(object):
             self._headers['Authorization'] = 'Bearer {}'.format(token)
             self._headers['Content-Type'] = 'application/yaml'
             self._headers['accept'] = 'application/json'
-            return self._send_delete("https://40.86.191.138:9999/osm/nsd/v1/ns_descriptors/{}".format(id), headers=self._headers)
+            return self._send_delete("https://192.168.100.212:9999/osm/nsd/v1/ns_descriptors/{}".format(id), headers=self._headers)
         return None
 
     def nsd_onboard(self, package):
@@ -86,7 +86,7 @@ class Client(object):
             headers['Content-File-MD5'] = self.md5(open('/tmp/'+package.name, 'rb'))
             #print type(open('cirros_2vnf_ns.tar.gz', 'rb').read())
             #r = requests.post(url='http://upload.example.com', data={'title': 'test_file},  files =  {'file':package})
-            return self._send_post("https://40.86.191.138:9999/osm/nsd/v1/ns_descriptors", headers=headers,
+            return self._send_post("https://192.168.100.212:9999/osm/nsd/v1/ns_descriptors", headers=headers,
                                   data=open('/tmp/'+package.name, 'rb'))
         return None
 
@@ -96,7 +96,7 @@ class Client(object):
             self._headers['Authorization'] = 'Bearer {}'.format(token)
             self._headers['Content-Type'] = 'application/yaml'
             self._headers['accept'] = 'application/json'
-            return self._send_get("https://40.86.191.138:9999/osm/vnfpkgm/v1/vnf_packages", headers=self._headers)
+            return self._send_get("https://192.168.100.212:9999/osm/vnfpkgm/v1/vnf_packages", headers=self._headers)
         return None
 
     def vnfd_get(self, id):
@@ -105,7 +105,7 @@ class Client(object):
             self._headers['Authorization'] = 'Bearer {}'.format(token)
             self._headers['Content-Type'] = 'application/yaml'
             self._headers['accept'] = 'application/json'
-            return self._send_get("https://40.86.191.138:9999/osm/vnfpkgm/v1/vnf_packages/{}".format(id), headers=self._headers)
+            return self._send_get("https://192.168.100.212:9999/osm/vnfpkgm/v1/vnf_packages/{}".format(id), headers=self._headers)
         return None
 
     def vnfd_delete(self, id):
@@ -114,7 +114,7 @@ class Client(object):
             self._headers['Authorization'] = 'Bearer {}'.format(token)
             self._headers['Content-Type'] = 'application/yaml'
             self._headers['accept'] = 'application/json'
-            return self._send_delete("https://40.86.191.138:9999/osm/vnfpkgm/v1/vnf_packages/{}".format(id), headers=self._headers)
+            return self._send_delete("https://192.168.100.212:9999/osm/vnfpkgm/v1/vnf_packages/{}".format(id), headers=self._headers)
         return None
 
     def vnfd_onboard(self, package):
@@ -128,7 +128,7 @@ class Client(object):
                 for chunk in package.chunks():
                     destination.write(chunk)
             headers['Content-File-MD5'] = self.md5(open('/tmp/'+package.name, 'rb'))
-            return self._send_post("https://40.86.191.138:9999/osm/vnfpkgm/v1/vnf_packages", headers=headers,
+            return self._send_post("https://192.168.100.212:9999/osm/vnfpkgm/v1/vnf_packages", headers=headers,
                                    data=open('/tmp/' + package.name, 'rb'))
         return None
 
@@ -181,7 +181,7 @@ class Client(object):
             hash_md5.update(chunk)
         return hash_md5.hexdigest()
 
-    def md5file(self, fname):
+    def f(self, fname):
         hash_md5 = hashlib.md5()
         with open(fname, "rb") as f:
            for chunk in iter(lambda: f.read(1024), b""):
