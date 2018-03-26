@@ -31,6 +31,9 @@ urlpatterns = [
     url(r'^deployments/', include('deploymenthandler.urls.deployment', namespace='deployment'), name='deployments_base'),
     url(r'^webhooks/', include('webhookhandler.urls.hooks', namespace='webhook'), name='webhook_base'),
     url(r'^agents/', include('deploymenthandler.urls.agent', namespace='agent'), name='agents_base'),
+    url(r'^vims/', include('vimhandler.urls', namespace='vim'), name='vims_base'),
+    url(r'^instances/', include('instancehandler.urls', namespace='instances'), name='instances_base'),
+
     url(r'^$', views.home, name='home'),
     url(r'^home', views.home, name='home'),
     url(r'^forbidden', views.forbidden, name='forbidden'),

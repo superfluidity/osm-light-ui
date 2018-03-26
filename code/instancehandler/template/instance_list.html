@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load get %}
+{% load staticfiles %}
+{% block head_base %}
+    {% with skin_css="AdminLTE/dist/css/skins/skin-purple.min.css" %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block body %}
+    {% with skin="purple" %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+{% block logo_sidebar %}
+    {% with logo_mini="assets/img/osm_small_logo.png" logo="assets/img/OSM-logo.png" %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+
+
+{% block head_block %}
+    {{ block.super }}
+
+{% endblock %}
+{% block title_header_big %}
+    {{ block.super }}
+{% endblock %}
+{% block left_sidebar %}
+
+    {% include 'left_sidebar_base.html' %}
+
+{% endblock %}
+
+
+{% block breadcrumb_body %}
+    {{ block.super }}
+    <li><a href="{% url 'instances:list' type=type %}">Instances</a></li>
+{% endblock %}
+
+{% block content_body %}
+    {{ block.super }}
+    {% include 'modal/instance_create.html' %}
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Instances</h3>
+                    <!--
+                    <div class="box-tools">
+                        <a href="javascript:newVimModal()" class="btn btn-block btn-primary btn-sm"><i
+                                class="fa fa-plus"></i><span> New VIM</span></a>
+                    </div>
+                    -->
+                </div>
+                <div class="box-body">
+                    <table id="instances_table" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Nsd name</th>
+                            <th>Operational Status</th>
+                            <th>Config Status</th>
+                            <th>Detailed Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in instances %}
+                            <tr>
+
+                                <td>{{ i|get:"_id" }}</td>
+                                <td>{{ i|get:"short-name" }}</td>
+                                <td>{{ i|get:"nsd-name-ref" }}</td>
+
+                                {% if i|get:"operational-status" == 'failed' %}
+                                    <td><span class="label label-danger">{{ i|get:"operational-status"  }}</span> </td>
+                                {% elif i|get:"operational-status" == 'init' %}
+                                     <td><span class="label label-warning">{{ i|get:"operational-status"  }}</span> </td>
+                                {% elif i|get:"operational-status" == 'running' %}
+                                     <td><span class="label label-success">{{ i|get:"operational-status"  }}</span> </td>
+                                {% endif %}
+                                {% if i|get:"config-status" == 'failed' %}
+                                    <td><span class="label label-danger">{{ i|get:"config-status"  }}</span> </td>
+                                {% elif i|get:"config-status" == 'init' %}
+                                     <td><span class="label label-warning">{{ i|get:"config-status"  }}</span> </td>
+                                {% elif i|get:"config-status" == 'running' %}
+                                     <td><span class="label label-success">{{ i|get:"config-status"  }}</span> </td>
+                                {% endif %}
+                                <td style=" max-width:1px; width:20%;overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">{{ i|get:"detailed-status" }}</td>
+
+                                <td>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default">Action</button>
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown"
+                                                aria-expanded="false">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href=""><i class="fa fa-info fa-fw"></i>info</a></li>
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a href=""><i class="fa fa-trash-o fa-fw"></i>Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block resource_block %}
+    {{ block.super }}
+    <!-- Utility JS -->
+    <script src="{% static "bootbox/bootbox.min.js" %}"></script>
+    <script>
+
+    </script>
+
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html" with proj_name="Lightweight-OSM" %}
+{% endblock %}

@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'sf_user',
     'projecthandler',
     'deploymenthandler',
-    'webhookhandler'
+    'webhookhandler',
+    'vimhandler',
+    'instancehandler'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -79,6 +81,8 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'projecthandler', 'template', 'download'),
             os.path.join(BASE_DIR, 'projecthandler', 'template', 'project'),
             os.path.join(BASE_DIR, 'deploymenthandler', 'template'),
+            os.path.join(BASE_DIR, 'vimhandler', 'template'),
+            os.path.join(BASE_DIR, 'instancehandler', 'template'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

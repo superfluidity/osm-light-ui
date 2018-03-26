@@ -72,6 +72,7 @@ class OsmProject(ProjectStateless):
                 print result
             elif type_descriptor == 'vnfd':
                 result = client.vnfd_get(descriptor_id)
+
                 print result
         except Exception as e:
             log.exception(e)

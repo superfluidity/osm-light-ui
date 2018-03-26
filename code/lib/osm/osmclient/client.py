@@ -1,6 +1,7 @@
 import requests
 import logging
 import json
+import yaml
 from lib.util import Util
 import hashlib
 
@@ -10,7 +11,7 @@ log = logging.getLogger('helper.py')
 
 
 class Client(object):
-    def __init__(self, host="192.168.100.212", so_port=9999, so_project='admin', ro_host=None, ro_port=9090, **kwargs):
+    def __init__(self, host="40.86.191.138", so_port=9999, so_project='admin', ro_host=None, ro_port=9090, **kwargs):
 
         self._user = 'admin'
         self._password = 'admin'
@@ -49,9 +50,9 @@ class Client(object):
         if token:
             self._headers['Authorization'] = 'Bearer {}'.format(token)
             self._headers['Content-Type'] = 'application/yaml'
-            self._headers['accept'] = 'application/json'
-            _url = "{0}/nsd/v1/ns_descriptors_content/{1}".format(self._base_path,id)
-            return self._send_get(_url, headers=self._headers)
+            #self._headers['accept'] = 'application/json'
+            _url = "{0}/nsd/v1/ns_descriptors/{1}/nsd".format(self._base_path,id)
+            return yaml.load(self._send_get(_url, headers=self._headers))
         return None
 
     def nsd_delete(self, id):
@@ -83,6 +84,16 @@ class Client(object):
                                   data=open('/tmp/'+package.name, 'rb'))
         return None
 
+    def ns_list(self):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            self._headers['Content-Type'] = 'application/yaml'
+            self._headers['accept'] = 'application/json'
+            _url = "{0}/nslcm/v1/ns_instances_content".format(self._base_path)
+            return self._send_get(_url, headers=self._headers)
+        return None
+
     def vnfd_list(self):
         token = self.get_token()
         if token:
@@ -98,9 +109,9 @@ class Client(object):
         if token:
             self._headers['Authorization'] = 'Bearer {}'.format(token)
             self._headers['Content-Type'] = 'application/yaml'
-            self._headers['accept'] = 'application/json'
-            _url = "{0}/vnfpkgm/v1/vnf_packages_content/{1}".format(self._base_path, id)
-            return self._send_get(_url, headers=self._headers)
+            #self._headers['accept'] = 'application/yaml'
+            _url = "{0}/vnfpkgm/v1/vnf_packages/{1}/vnfd".format(self._base_path, id)
+            return yaml.load(self._send_get(_url, headers=self._headers))
         return None
 
     def vnfd_delete(self, id):
@@ -156,7 +167,10 @@ class Client(object):
             log.exception(e)
             print "Exception during send GET"
             return {'error': 'error during connection to agent'}
-        return Util.json_loads_byteified(r.text)
+        if 'accept' in kwargs['headers'] and kwargs['headers']['accept'] == 'application/json':
+            return Util.json_loads_byteified(r.text)
+        else:
+            return r.text
 
     def _send_delete(self, url, params=None, **kwargs):
         try:

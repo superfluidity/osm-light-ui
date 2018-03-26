@@ -20,6 +20,9 @@
                 <tr role="row">
                     <th>Id</th>
                     <th>Name</th>
+                    <th>Description</th>
+                    <th>Vendor</th>
+                    <th>Version</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -28,11 +31,14 @@
                 <tr role="row">
                     <td>{{ k|get:"_id" }}</td>
                     <td>{{ k|get:"short-name" }} </td>
+                    <td>{{ k|get:"description" }} </td>
+                    <td>{{ k|get:"vendor" }} </td>
+                    <td>{{ k|get:"version" }} </td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-info" onclick="javascript:openDescriptorView('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-edit"></i></button>
-                            <button type="button" class="btn btn-success" onclick="location.href='/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{ k|get:"_id" }}'"><i class="fa fa-sitemap fa-fw"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="location.href='/projects/{{project_id}}/descriptors/{{descriptor_type}}/{{ k|get:"_id" }}/delete'"><i class="fa fa-trash-o"></i></button>
+                            <button type="button" class="btn btn-default" onclick="javascript:openDescriptorView('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-default" onclick="location.href='/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{ k|get:"_id" }}'"><i class="fa fa-sitemap fa-fw"></i></button>
+                            <button type="button" class="btn btn-default" onclick="location.href='/projects/{{project_id}}/descriptors/{{descriptor_type}}/{{ k|get:"_id" }}/delete'"><i class="fa fa-trash-o"></i></button>
                         </div>
                         <!--
                         <div class="btn-group">
@@ -64,8 +70,10 @@
                   <tr role="row">
                     <th>Id</th>
                     <th>Name</th>
-                    <th>Actions
-                    </th>
+                    <th>Description</th>
+                    <th>Vendor</th>
+                      <th>Version</th>
+                    <th>Actions</th>
                   </tr>
                   </tfoot>
             </table>
