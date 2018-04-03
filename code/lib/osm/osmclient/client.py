@@ -1,7 +1,9 @@
 import requests
 import logging
 import json
+import tarfile
 import yaml
+import StringIO
 from lib.util import Util
 import hashlib
 
@@ -153,7 +155,7 @@ class Client(object):
     def _send_post(self, url, data=None, json=None, **kwargs):
         try:
             r = requests.post(url, data=data, json=json, verify=False, **kwargs)
-            print r.text
+            #print r.text
         except Exception as e:
             log.exception(e)
             print "Exception during send POST"
@@ -162,13 +164,28 @@ class Client(object):
 
     def _send_get(self, url, params=None, **kwargs):
         try:
-            r = requests.get(url, params=None, verify=False, **kwargs)
+            r = requests.get(url, params=None, verify=False, stream=True, **kwargs)
+            #print r.header
         except Exception as e:
             log.exception(e)
             print "Exception during send GET"
             return {'error': 'error during connection to agent'}
-        if 'accept' in kwargs['headers'] and kwargs['headers']['accept'] == 'application/json':
-            return Util.json_loads_byteified(r.text)
+        if 'accept' in kwargs['headers']:
+            accept = kwargs['headers']['accept']
+            if accept == 'application/json':
+                print "json"
+                return Util.json_loads_byteified(r.text)
+            elif accept == 'application/zip':
+                tarf = tarfile.open(fileobj=StringIO.StringIO(r.content))
+                # for tarinfo in tarf:
+                #     print(tarinfo.name, "is", tarinfo.size, "bytes in size and is")
+                #     if tarinfo.isreg():
+                #         print("a regular file.")
+                #     elif tarinfo.isdir():
+                #         print("a directory.")
+                #     else:
+                #         print("something else.")
+                return tarf
         else:
             return r.text
 
@@ -187,3 +204,18 @@ class Client(object):
             hash_md5.update(chunk)
         return hash_md5.hexdigest()
 
+    def get_nsd_pkg(self, id):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            #self._headers['Content-Type'] = 'application/yaml'
+            self._headers['accept'] = 'application/zip'
+            _url = "{0}/nsd/v1/ns_descriptors/{1}/nsd_content".format(self._base_path, id)
+            return self._send_get(_url, headers=self._headers)
+        return None
+
+if __name__ == '__main__':
+    client = Client()
+    package = client.get_nsd_pkg()
+    #package.flush()
+    #package.extractall("/Users/francesco/st.tar.gz")

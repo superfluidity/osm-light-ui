@@ -53,10 +53,9 @@ class OsmProject(ProjectStateless):
             client = Client()
             if type_descriptor == 'nsd':
                 result = client.nsd_list()
-                print result
+
             elif type_descriptor == 'vnfd':
                 result = client.vnfd_list()
-                #print result
 
         except Exception as e:
             log.exception(e)
@@ -139,16 +138,19 @@ class OsmProject(ProjectStateless):
 
     def get_overview_data(self):
         current_data = json.loads(self.data_project)
+        client = Client()
+        nsd = client.nsd_list()
+        vnfd = client.vnfd_list()
+        ns = client.ns_list()
         result = {
             'owner': self.owner.__str__(),
             'name': self.name,
             'updated_date': self.updated_date.strftime('%Y-%m-%d %H:%M'),
             'info': self.info,
             'type': 'osm',
-            'nsd': '#',#len(current_data['nsd'].keys()) if 'nsd' in current_data else 0,
-
-            'vnfd': '#',#len(current_data['vnfd'].keys()) if 'vnfd' in current_data else 0,
-
+            'nsd': len(nsd) if nsd else 0,
+            'vnfd': len(vnfd) if vnfd else 0,
+            'ns': len(ns) if ns else 0,
             'validated': self.validated
         }
 
@@ -213,7 +215,7 @@ class OsmProject(ProjectStateless):
 
     def get_remove_element(self, request):
         result = False
-        
+
         return result
 
     def get_add_link(self, request):

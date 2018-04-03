@@ -61,6 +61,7 @@
     <script src="{% static "codemirror/addon/fold/brace-fold.js" %}"></script>
     <script src="{% static "codemirror/mode/javascript/javascript.js" %}"></script>
     <script src="{% static "codemirror/mode/xml/xml.js" %}"></script>
+    <script src="{% static "codemirror/mode/yaml/yaml.js" %}"></script>
     <script src="{% static "codemirror/mode/markdown/markdown.js" %}"></script>
     <script src="{% static "codemirror/addon/search/searchcursor.js" %}"></script>
     <script src="{% static "codemirror/addon/search/search.js" %}"></script>
@@ -100,30 +101,30 @@
         }
 
     var yaml_editor_settings = {
-            mode: "yaml-frontmatter",
-            showCursorWhenSelecting: true,
-            autofocus: true,
-            autoRefresh: true,
-            lineNumbers: true,
-            lineWrapping: true,
-            foldGutter: true,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-            autoCloseBrackets: true,
-            matchBrackets: true,
-            extraKeys: {
-                "F11": function(cm) {
-                    cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+                mode: "yaml",
+                showCursorWhenSelecting: true,
+                autofocus: true,
+                autoRefresh: true,
+                lineNumbers: true,
+                lineWrapping: true,
+                foldGutter: true,
+                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                extraKeys: {
+                    "F11": function(cm) {
+                        cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+                    },
+                    "Esc": function(cm) {
+                        if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+                    },
+                    "Ctrl-Q": function(cm) {
+                        cm.foldCode(cm.getCursor());
+                    }
                 },
-                "Esc": function(cm) {
-                    if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-                },
-                "Ctrl-Q": function(cm) {
-                    cm.foldCode(cm.getCursor());
-                }
-            },
-            //theme: "neat",
-            keyMap: "sublime",
-        }
+                theme: "neat",
+                keyMap: "sublime",
+            };
 
 
 function goToGraph(){
@@ -131,4 +132,3 @@ function goToGraph(){
 }
     </script>
 {% endblock %}
-

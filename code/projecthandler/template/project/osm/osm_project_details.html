@@ -20,28 +20,65 @@
     {% include 'osm/osm_project_left_sidebar.html' %}
 {% endblock %}
 
-{% block content_descritors_col %}
-    {{ block.super }}
-    <div class="row">
-        <div class="col-md-6 ">
-            <div class="small-box bg-aqua">
-                <div class="inner"><h3>{{ project_overview.nsd }}</h3>
-                    <p>Nsd type</p></div>
-                <div class="icon"><i class="fa fa-file-code-o"></i></div>
-                <a href="/projects/{{ project_id }}/descriptors/nsd" class="small-box-footer">Open list <i
-                        class="fa fa-arrow-circle-right"></i></a></div>
-        </div>
-        <div class="col-md-6 ">
-            <div class="small-box bg-aqua">
-                <div class="inner"><h3>{{ project_overview.vnfd }}</h3>
-                    <p>Vnfd type</p></div>
-                <div class="icon"><i class="fa fa-file-code-o"></i></div>
-                <a href="/projects/{{ project_id }}/descriptors/vnfd" class="small-box-footer">Open list <i
-                        class="fa fa-arrow-circle-right"></i></a></div>
+{% block content_body %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-widget">
+            <div class="box-footer no-padding">
+                <ul class="nav nav-stacked">
+                    <li><a><b>Project Name:</b> <span
+                        class="pull-right">{{project_overview.name}}</span></a>
+                    </li>
+                    <li><a><b>Info:</b> <span
+                            class="pull-right">{{project_overview.info}}</span></a></li>
+                    <li><a><b>Last updated:</b> <span
+                        class="pull-right">{{project_overview.updated_date}}</span></a>
+                    </li>
+                    <li><a><b>Owner:</b> <span
+                            class="pull-right">{{project_overview.owner}}</span></a></li>
+                </ul>
+
+            </div>
+
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="small-box bg-aqua">
+                    <div class="inner"><h3>{{ project_overview.nsd }}</h3>
+                        <p>NS packages</p></div>
+                    <div class="icon"><i class="fa fa-archive"></i></div>
+                    <a href="/projects/{{ project_id }}/descriptors/nsd" class="small-box-footer">Open list <i
+                            class="fa fa-arrow-circle-right"></i></a></div>
+            </div>
+            <div class="col-md-6 ">
+                <div class="small-box bg-aqua">
+                    <div class="inner"><h3>{{ project_overview.vnfd }}</h3>
+                        <p>VNF packages</p></div>
+                    <div class="icon"><i class="fa fa-archive"></i></div>
+                    <a href="/projects/{{ project_id }}/descriptors/vnfd" class="small-box-footer">Open list <i
+                            class="fa fa-arrow-circle-right"></i></a></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="small-box bg-aqua">
+                    <div class="inner"><h3>{{ project_overview.ns }}</h3>
+                        <p>NS records</p></div>
+                    <div class="icon"><i class="fa fa-file-code-o"></i></div>
+                    <a href='{% url "instances:list" type="ns" %}' class="small-box-footer">Open list <i
+                            class="fa fa-arrow-circle-right"></i></a></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}
+
 
 {% block footer %}
     {% include "footer.html" with proj_name="Lightweight-OSM" %}

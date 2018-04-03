@@ -12,9 +12,7 @@ def list(request, type=None):
     client = Client()
     if type == 'ns':
         result = client.ns_list()
-    elif type == 'vnf':
-        result = client.vnf_list()
-    print result
+    
     return __response_handler(request, {'instances': result, 'type': 'ns'}, 'instance_list.html')
 
 
