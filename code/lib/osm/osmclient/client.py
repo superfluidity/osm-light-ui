@@ -86,6 +86,16 @@ class Client(object):
                                   data=open('/tmp/'+package.name, 'rb'))
         return None
 
+    def nsd_artifacts(self, id):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            self._headers['Content-Type'] = 'application/yaml'
+            self._headers['accept'] = 'text/plain'
+            _url = "{0}/nsd/v1/ns_descriptors/{1}/artifacts".format(self._base_path, id)
+            return self._send_get(_url, headers=self._headers)
+        return None
+
     def ns_list(self):
         token = self.get_token()
         if token:
@@ -141,6 +151,14 @@ class Client(object):
             return self._send_post(_url, headers=headers,
                                    data=open('/tmp/' + package.name, 'rb'))
         return None
+    def vnf_packages_artifacts(self, id):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            self._headers['Content-Type'] = 'application/yaml'
+            _url = "{0}/vnfpkgm/v1/vnf_packages/{1}/artifacts".format(self._base_path, id)
+            return self._send_get(_url, headers=self._headers)
+        return None
 
     def _upload_package(self, filename, package):
         token = self.get_token()
@@ -186,6 +204,8 @@ class Client(object):
                 #     else:
                 #         print("something else.")
                 return tarf
+            else:
+                return r.text
         else:
             return r.text
 

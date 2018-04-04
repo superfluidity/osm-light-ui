@@ -586,6 +586,18 @@ def generatehottemplate(request, project_id=None, project=None, descriptor_id=No
 
 # end TOSCA specific method #
 
+# OSM specific method #
+def get_package_files_list(request, project_id, project, descriptor_id, descriptor_type):
+    files_list = []
+    try:
+        files_list = project.get_package_files_list(descriptor_type, descriptor_id)
+        result = {'files': files_list}
+    except Exception as e:
+        print e
+        url = 'error.html'
+        result = {'error_msg': 'Unknown error.'}
+    return __response_handler(request, result)
+# end OSM specific method #
 
 @login_required
 def custom_action(request, project_id=None, descriptor_id=None, descriptor_type=None, action_name=None):

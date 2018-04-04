@@ -188,7 +188,6 @@ class OsmProject(ProjectStateless):
 
     def delete_descriptor(self, type_descriptor, descriptor_id):
         log.debug('Delete descriptor')
-
         try:
             client = Client()
             if type_descriptor == 'nsd':
@@ -205,6 +204,22 @@ class OsmProject(ProjectStateless):
             result = False
         return result
 
+    def get_package_files_list(self, type_descriptor, descriptor_id):
+        try:
+            client = Client()
+            if type_descriptor == 'nsd':
+                result = client.nsd_artifacts(descriptor_id)
+            elif type_descriptor == 'vnfd':
+                result = client.vnf_packages_artifacts(descriptor_id)
+            else:
+                return False
+            result = yaml.load(result)
+            print result
+        except Exception as e:
+            log.exception(e)
+            result = False
+        print result
+        return result
     def set_validated(self, value):
         self.validated = True if value is not None and value == True else False
 
