@@ -28,27 +28,27 @@ import git
 # DO NOT REMOVE THIS COMMENT #
 # Project Models #
 from projecthandler.osm_model import OsmProject
-from projecthandler.cran_model import CranProject
-from projecthandler.nemo_model import NemoProject
-from projecthandler.toscanfv_model import ToscanfvProject
-from projecthandler.superfluidity_model import SuperfluidityProject
-from projecthandler.oshi_model import OshiProject
-from projecthandler.click_model import ClickProject
-from projecthandler.etsi_model import EtsiProject
+# from projecthandler.cran_model import CranProject
+# from projecthandler.nemo_model import NemoProject
+# from projecthandler.toscanfv_model import ToscanfvProject
+# from projecthandler.superfluidity_model import SuperfluidityProject
+# from projecthandler.oshi_model import OshiProject
+# from projecthandler.click_model import ClickProject
+# from projecthandler.etsi_model import EtsiProject
 from projecthandler.models import Project
-from projecthandler.tosca_model import ToscaProject
+#from projecthandler.tosca_model import ToscaProject
 
 # DO NOT REMOVE THIS COMMENT #
 # Project Model Type declarations #
 Project.add_project_type('osm', OsmProject)
-Project.add_project_type('cran', CranProject)
-Project.add_project_type('nemo', NemoProject)
-Project.add_project_type('toscanfv', ToscanfvProject)
-Project.add_project_type('superfluidity', SuperfluidityProject)
-Project.add_project_type('oshi', OshiProject)
-Project.add_project_type('etsi', EtsiProject)
-Project.add_project_type('click', ClickProject)
-Project.add_project_type('tosca', ToscaProject)
+# Project.add_project_type('cran', CranProject)
+# Project.add_project_type('nemo', NemoProject)
+# Project.add_project_type('toscanfv', ToscanfvProject)
+# Project.add_project_type('superfluidity', SuperfluidityProject)
+# Project.add_project_type('oshi', OshiProject)
+# Project.add_project_type('etsi', EtsiProject)
+# Project.add_project_type('click', ClickProject)
+# Project.add_project_type('tosca', ToscaProject)
 
 
 from projecthandler.models import Repository

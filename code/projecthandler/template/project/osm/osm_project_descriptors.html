@@ -49,6 +49,7 @@
 {% block content_body %}
   	{{ block.super }}
 {% include 'osm/modal/files_list.html' %}
+{% include 'modal/instance_create.html' %}
 <div class="row">
     {% include "osm/descriptor/descriptorlist.html" %}
 </div>
@@ -62,7 +63,9 @@
 <script src="{% static "bootbox/bootbox.min.js" %}"></script>
     <script>
 
-
+    function openModalCreateNS(project_id, descriptor_type, descriptor_id) {
+        $('#modal_new_instance').modal('show');
+    }
 function openPackageContentList(project_id, type, pkg_id){
     var dialog = bootbox.dialog({
         message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
