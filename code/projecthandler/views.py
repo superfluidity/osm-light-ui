@@ -597,6 +597,29 @@ def get_package_files_list(request, project_id, project, descriptor_id, descript
         url = 'error.html'
         result = {'error_msg': 'Unknown error.'}
     return __response_handler(request, result)
+
+def create_ns(request, project_id, project, descriptor_id, descriptor_type):
+    files_list = []
+    try:
+        ns_data={
+          "nsName": request.POST.get('nsName', 'WithoutName'),
+          "nsDescription": request.POST.get('nsDescription', ''),
+          "nsdId": request.POST.get('nsdId', ''),
+          "vimAccountId": request.POST.get('vimAccountId', ''),
+          "ssh-authorized-key": [
+            {
+              request.POST.get('key-pair-ref', ''): request.POST.get('keyValue', '')
+            }
+          ]
+        }
+        #result = project.create_ns(descriptor_type, descriptor_id, ns_data)
+
+    except Exception as e:
+        print e
+        url = 'error.html'
+        result = {'error_msg': 'Unknown error.'}
+    return __response_handler(request, result)
+
 # end OSM specific method #
 
 @login_required

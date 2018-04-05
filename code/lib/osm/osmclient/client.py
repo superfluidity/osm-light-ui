@@ -106,6 +106,19 @@ class Client(object):
             return self._send_get(_url, headers=self._headers)
         return None
 
+    def ns_create(self, ns_data):
+        token = self.get_token()
+        headers = {}
+        if token:
+            headers['Authorization'] = 'Bearer {}'.format(token)
+            headers['Content-Type'] = 'application/yaml'
+            headers['accept'] = 'application/json'
+
+            _url = "{0}/nslcm/v1/ns_instances_content".format(self._base_path)
+            return self._send_post(_url, headers=headers,
+                                  json=ns_data)
+        return None
+
     def vnfd_list(self):
         token = self.get_token()
         if token:
@@ -173,7 +186,7 @@ class Client(object):
     def _send_post(self, url, data=None, json=None, **kwargs):
         try:
             r = requests.post(url, data=data, json=json, verify=False, **kwargs)
-            #print r.text
+            print r.text
         except Exception as e:
             log.exception(e)
             print "Exception during send POST"

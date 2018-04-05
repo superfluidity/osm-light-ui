@@ -220,6 +220,7 @@ class OsmProject(ProjectStateless):
             result = False
         print result
         return result
+
     def set_validated(self, value):
         self.validated = True if value is not None and value == True else False
 
@@ -242,6 +243,21 @@ class OsmProject(ProjectStateless):
     def get_remove_link(self, request):
         result = False
 
+        return result
+
+    def create_ns(self, descriptor_type, descriptor_id, data_ns):
+        try:
+            client = Client()
+            if descriptor_type == 'nsd':
+                result = client.ns_create( data_ns)
+
+            else:
+                return False
+
+        except Exception as e:
+            log.exception(e)
+            result = False
+        print result
         return result
 
 

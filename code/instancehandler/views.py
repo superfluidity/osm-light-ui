@@ -12,13 +12,28 @@ def list(request, type=None):
     client = Client()
     if type == 'ns':
         result = client.ns_list()
-    
+
     return __response_handler(request, {'instances': result, 'type': 'ns'}, 'instance_list.html')
 
 
 def create(request):
+
     result = {}
-    return  __response_handler(request, result, 'instances:list', to_redirect=True)
+    ns_data={
+      "nsName": request.POST.get('nsName', 'WithoutName'),
+      "nsDescription": request.POST.get('nsDescription', ''),
+      "nsdId": request.POST.get('nsdId', ''),
+      "vimAccountId": request.POST.get('vimAccountId', ''),
+      "ssh-authorized-key": [
+        {
+          request.POST.get('key-pair-ref', ''): request.POST.get('keyValue', '')
+        }
+      ]
+    }
+    print ns_data
+    client = Client()
+    result =  client.ns_create(ns_data)
+    return  __response_handler(request, result, 'instances:list', to_redirect=True, type='ns')
 
 
 def delete(request, instance_id=None, type=None):
