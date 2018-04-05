@@ -29,10 +29,10 @@
                 </ul>
             </li>
             {% url "instances:list"  type='ns' as  instance_ns_list_url %}
-            <li {% if request.get_full_path == instance_ns_list_url %} class="active" {% endif %} ><a href='{% url "instances:list"  type='ns'%}'><i class="fa fa-list fa-fw"></i><span>NS records</span></a>
+            <li {% if request.get_full_path == instance_ns_list_url %} class="active" {% endif %} ><a href='{% url "instances:list"  type='ns'%}'><i class="fa fa-list fa-fw"></i><span>NS Instances</span></a>
             <li class="header">Config</li>
             {% url "vim:list"  type='ns' as  vim_list_url %}
-             <li {% if request.get_full_path == vim_list_url %} class="active" {% endif %}><a href='{% url "vim:list" %}'><i class="fa fa-list fa-fw"></i><span>Vims</span></a></li>
+             <li {% if request.get_full_path == vim_list_url %} class="active" {% endif %}><a href='{% url "vim:list" %}'><i class="fa fa-list fa-fw"></i><span>VIM Accounts</span></a></li>
 
         </ul>
     </section>
