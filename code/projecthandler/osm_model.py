@@ -203,7 +203,22 @@ class OsmProject(ProjectStateless):
             log.exception(e)
             result = False
         return result
+    def edit_descriptor(self, type_descriptor, descriptor_id, new_data, data_type):
+        log.debug("Edit descriptor")
+        try:
+            client = Client()
+            if type_descriptor == 'nsd':
+                result = client.nsd_update(descriptor_id, new_data)
+            elif type_descriptor == 'vnfd':
+                result = client.vnfd_update(descriptor_id, new_data)
 
+            else:
+                log.debug('Create descriptor: Unknown data type')
+                return False
+        except Exception as e:
+            log.exception(e)
+            result = False
+        return result
     def get_package_files_list(self, type_descriptor, descriptor_id):
         try:
             client = Client()
@@ -250,7 +265,6 @@ class OsmProject(ProjectStateless):
             client = Client()
             if descriptor_type == 'nsd':
                 result = client.ns_create( data_ns)
-
             else:
                 return False
 
@@ -260,6 +274,21 @@ class OsmProject(ProjectStateless):
         print result
         return result
 
+    def download_pkg(self, project, descriptor_id, descriptor_type):
+        try:
+            client = Client()
+            if descriptor_type == 'nsd':
+                result = client.get_nsd_pkg(descriptor_id)
+            elif descriptor_type == 'vnfd':
+                result = client.get_vnfd_pkg(descriptor_id)
+            else:
+                return False
+
+        except Exception as e:
+            log.exception(e)
+            result = False
+        print result
+        return result
 
     def get_available_nodes(self, args):
         """Returns all available node """

@@ -15,7 +15,7 @@ log = logging.getLogger('helper.py')
 class Client(object):
     def __init__(self, host=os.getenv('OSM_SERVER',"localhost"), so_port=9999, so_project='admin', ro_host=None, ro_port=9090, **kwargs):
 #os.getenv('OSM_SERVER', "localhost")
-        #print os.getenv('OSM_SERVER',"40.86.191.138")
+        ##print os.getenv('OSM_SERVER',"40.86.191.138")
         self._user = 'admin'
         self._password = 'admin'
         # self._project = so_project
@@ -67,6 +67,20 @@ class Client(object):
             _url = "{0}/nsd/v1/ns_descriptors_content/{1}".format(self._base_path, id)
             return self._send_delete(_url, headers=self._headers)
         return None
+    def nsd_update(self, id, data):
+        token = self.get_token()
+        if token:
+            tar_pkg = self.get_nsd_pkg(id)
+
+            for tarinfo in tar_pkg:
+                print(tarinfo.name, "is", tarinfo.size, "bytes in size and is")
+                if tarinfo.isreg():
+                    print("a regular file.")
+                elif tarinfo.isdir():
+                    print("a directory.")
+                else:
+                    print("something else.")
+        return True
 
     def nsd_onboard(self, package):
         token = self.get_token()
@@ -80,7 +94,7 @@ class Client(object):
                 for chunk in package.chunks():
                     destination.write(chunk)
             headers['Content-File-MD5'] = self.md5(open('/tmp/'+package.name, 'rb'))
-            #print type(open('cirros_2vnf_ns.tar.gz', 'rb').read())
+            ##print type(open('cirros_2vnf_ns.tar.gz', 'rb').read())
             #r = requests.post(url='http://upload.example.com', data={'title': 'test_file},  files =  {'file':package})
             _url = "{0}/nsd/v1/ns_descriptors_content/".format(self._base_path)
             return self._send_post(_url, headers=headers,
@@ -187,36 +201,37 @@ class Client(object):
     def _send_post(self, url, data=None, json=None, **kwargs):
         try:
             r = requests.post(url, data=data, json=json, verify=False, **kwargs)
-            print r.text
+            #print r.text
         except Exception as e:
             log.exception(e)
-            print "Exception during send POST"
+            #print "Exception during send POST"
             return {'error': 'error during connection to agent'}
         return Util.json_loads_byteified(r.text)
 
     def _send_get(self, url, params=None, **kwargs):
         try:
             r = requests.get(url, params=None, verify=False, stream=True, **kwargs)
-            #print r.header
+            ##print r.header
         except Exception as e:
             log.exception(e)
-            print "Exception during send GET"
+            #print "Exception during send GET"
             return {'error': 'error during connection to agent'}
         if 'accept' in kwargs['headers']:
             accept = kwargs['headers']['accept']
             if accept == 'application/json':
-                print "json"
+                #print "json"
                 return Util.json_loads_byteified(r.text)
             elif accept == 'application/zip':
-                tarf = tarfile.open(fileobj=StringIO.StringIO(r.content))
+                tarf =StringIO.StringIO(r.content)
+                #tarf = tarfile.open(fileobj=StringIO.StringIO(r.content))
                 # for tarinfo in tarf:
-                #     print(tarinfo.name, "is", tarinfo.size, "bytes in size and is")
+                #     #print(tarinfo.name, "is", tarinfo.size, "bytes in size and is")
                 #     if tarinfo.isreg():
-                #         print("a regular file.")
+                #         #print("a regular file.")
                 #     elif tarinfo.isdir():
-                #         print("a directory.")
+                #         #print("a directory.")
                 #     else:
-                #         print("something else.")
+                #         #print("something else.")
                 return tarf
             else:
                 return r.text
@@ -228,7 +243,7 @@ class Client(object):
             r = requests.delete(url, params=None, verify=False, **kwargs)
         except Exception as e:
             log.exception(e)
-            print "Exception during send DELETE"
+            #print "Exception during send DELETE"
             return {'error': 'error during connection to agent'}
         return Util.json_loads_byteified(r.text)
 
@@ -248,8 +263,15 @@ class Client(object):
             return self._send_get(_url, headers=self._headers)
         return None
 
+    def get_vnfd_pkg(self, id):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            #self._headers['Content-Type'] = 'application/yaml'
+            self._headers['accept'] = 'application/zip'
+            _url = "{0}/vnfpkgm/v1/vnf_packages/{1}/package_content".format(self._base_path, id)
+            return self._send_get(_url, headers=self._headers)
+        return None
 if __name__ == '__main__':
     client = Client()
     package = client.get_nsd_pkg()
-    #package.flush()
-    #package.extractall("/Users/francesco/st.tar.gz")

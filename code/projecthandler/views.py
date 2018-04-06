@@ -24,6 +24,7 @@ from django.template.loader import render_to_string
 from lib.util import Util
 from sf_user.models import CustomUser
 import git
+import tarfile
 
 # DO NOT REMOVE THIS COMMENT #
 # Project Models #
@@ -597,6 +598,15 @@ def get_package_files_list(request, project_id, project, descriptor_id, descript
         url = 'error.html'
         result = {'error_msg': 'Unknown error.'}
     return __response_handler(request, result)
+
+def download_pkg(request, project_id, project, descriptor_id, descriptor_type):
+    tar_pkg = project.download_pkg(project, descriptor_id, descriptor_type)
+
+    response = HttpResponse(content_type="application/tgz")
+    response["Content-Disposition"] = "attachment; filename=osm_export.tar.gz"
+    response.write(tar_pkg.getvalue())
+    return response
+
 
 def create_ns(request, project_id, project, descriptor_id, descriptor_type):
     files_list = []
