@@ -89,9 +89,10 @@
                                      <td><span class="label label-warning">{{ i|get:"config-status"  }}</span> </td>
                                 {% elif i|get:"config-status" == 'running' %}
                                      <td><span class="label label-success">{{ i|get:"config-status"  }}</span> </td>
+                                {% elif i|get:"config-status" == 'configured' %}
+                                          <td><span class="label label-success">{{ i|get:"config-status"  }}</span> </td>
                                 {% endif %}
                                 <td style=" max-width:1px; width:20%;overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">{{ i|get:"detailed-status" }}</td>
-
                                 <td>
 
                                     <div class="btn-group">
