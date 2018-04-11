@@ -3,29 +3,15 @@
 
 # Lightweight GUI for OSM lightweight build 
 
+This project focuses on the implementation of a web GUI to interact with the Northbound API of OSM lightweigth build. 
 
-
-
-RDCL 3D is a web framework for the design of NFV services and components. The framework allows editing,
+The project is based on RDCL 3D, a web framework for the design of NFV services and components. The framework allows editing,
 validating, visualizing the descriptors of services and components both textually and graphically.
-
-
-
-The platform is designed with a modular approach, allowing developers to "plug in" the support for new models (project types).
-Currently supported project types are:
-
-* ETSI Release 2 NS and VNF descriptors
-* TOSCA Simple Profile for NFV
-* Click modular router configurations
-* Superfluidity-ETSI (ETSI R2 + Click)
-
-A demo version of RDCL 3D is online [here](http://rdcl-demo.netgroup.uniroma2.it/).
-
 
 
 ## Documentation & publications
 
-A publication on the background work (RDCL 3D is available)
+A publication on the background work (RDCL 3D) is available:
 
 S. Salsano, F. Lombardo, C. Pisa, P. Greto, N. Blefari-Melazzi,
 “RDCL 3D, a Model Agnostic Web Framework for the Design and Composition of NFV Services”,
