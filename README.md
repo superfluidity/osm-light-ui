@@ -5,7 +5,7 @@
 
 This project focuses on the implementation of a web GUI to interact with the Northbound API of OSM lightweigth build. 
 
-The project is based on RDCL 3D, a web framework for the design of NFV services and components. The framework allows editing,
+The project is based on ([RDCL 3D](https://github.com/superfluidity/RDCL3D)), a web framework for the design of NFV services and components. The framework allows editing,
 validating, visualizing the descriptors of services and components both textually and graphically.
 
 
