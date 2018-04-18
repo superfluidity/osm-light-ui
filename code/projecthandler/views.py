@@ -42,14 +42,7 @@ from projecthandler.models import Project
 # DO NOT REMOVE THIS COMMENT #
 # Project Model Type declarations #
 Project.add_project_type('osm', OsmProject)
-# Project.add_project_type('cran', CranProject)
-# Project.add_project_type('nemo', NemoProject)
-# Project.add_project_type('toscanfv', ToscanfvProject)
-# Project.add_project_type('superfluidity', SuperfluidityProject)
-# Project.add_project_type('oshi', OshiProject)
-# Project.add_project_type('etsi', EtsiProject)
-# Project.add_project_type('click', ClickProject)
-# Project.add_project_type('tosca', ToscaProject)
+
 
 
 from projecthandler.models import Repository

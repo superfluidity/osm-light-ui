@@ -4,7 +4,7 @@
 
 {% block head_block %}
 {{ block.super }}
-    <link rel="stylesheet" href="{% static "AdminLTE/plugins/select2/select2.css" %}">
+    <link rel="stylesheet" href="{% static "bower_components/admin-lte/plugins/select2/select2.css" %}">
 
     <style type="text/css">
 
@@ -112,7 +112,7 @@
 {% block resource_block %}
 {{ block.super }}
     <!-- Select2 -->
-    <script src="{% static "AdminLTE/plugins/select2/select2.full.min.js" %}"></script>
+    <script src="{% static "bower_components/admin-lte/plugins/select2/select2.full.min.js" %}"></script>
 
     <script src="{% static "src/projecthandler/new_project.js" %}"></script>
 <script>

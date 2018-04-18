@@ -1,2 +1,0 @@
-CREATE Nodemodel lb
-  Property string: operating-mode, string: location;

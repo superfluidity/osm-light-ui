@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sf_user',
     'projecthandler',
-    'deploymenthandler',
-    'webhookhandler',
     'vimhandler',
     'instancehandler'
 ]
@@ -80,7 +78,6 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'projecthandler', 'template'),
             os.path.join(BASE_DIR, 'projecthandler', 'template', 'download'),
             os.path.join(BASE_DIR, 'projecthandler', 'template', 'project'),
-            os.path.join(BASE_DIR, 'deploymenthandler', 'template'),
             os.path.join(BASE_DIR, 'vimhandler', 'template'),
             os.path.join(BASE_DIR, 'instancehandler', 'template'),
         ],
@@ -156,6 +153,7 @@ STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.DefaultStorageFinder'
 )
 
 STATICFILES_DIRS = (

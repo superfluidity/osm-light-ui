@@ -1,2 +1,0 @@
-CREATE Nodemodel l3-group
-  Property string: ip-prefix;

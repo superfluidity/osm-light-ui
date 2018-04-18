@@ -28,9 +28,6 @@ urlpatterns = [
     url(r'^projects/', include('projecthandler.urls.project', namespace='projects'), name='projects_base'),
     url(r'^repos/', include('projecthandler.urls.repo', namespace='repos'), name='repos_base'),
     url(r'^translator/', include('projecthandler.urls.translator', namespace='translator'), name='translator_base'),
-    url(r'^deployments/', include('deploymenthandler.urls.deployment', namespace='deployment'), name='deployments_base'),
-    url(r'^webhooks/', include('webhookhandler.urls.hooks', namespace='webhook'), name='webhook_base'),
-    url(r'^agents/', include('deploymenthandler.urls.agent', namespace='agent'), name='agents_base'),
     url(r'^vims/', include('vimhandler.urls', namespace='vim'), name='vims_base'),
     url(r'^instances/', include('instancehandler.urls', namespace='instances'), name='instances_base'),
 

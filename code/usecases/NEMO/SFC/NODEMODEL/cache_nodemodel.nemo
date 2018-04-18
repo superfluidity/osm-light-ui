@@ -1,2 +1,0 @@
-CREATE Nodemodel cache
-  Property string: operating-mode, string: location;

@@ -38,10 +38,10 @@ target/
 #MacOS files
 .DS_Store
 
+#Bower
+static/bower_components
+
 #migrations
-deploymenthandler/migrations/
 projecthandler/migrations/
 sf_user/migrations/
-webhookhandler/migrations
-vimhandler/migrations
 instancehandler/migrations
