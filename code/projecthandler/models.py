@@ -26,7 +26,7 @@ import yaml
 from lib.util import Util
 from model_utils.managers import InheritanceManager
 import logging
-import os, shutil, git
+import os, shutil
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('models.py')

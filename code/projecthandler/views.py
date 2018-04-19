@@ -23,7 +23,6 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from lib.util import Util
 from sf_user.models import CustomUser
-import git
 import tarfile
 
 # DO NOT REMOVE THIS COMMENT #
@@ -177,53 +176,6 @@ def delete_project(request, project_id=None):
             return render(request, 'error.html', {'error_msg': 'Project not found.'})
 
 
-@login_required
-def translate_push(request, project_id=None):
-    if request.method == 'POST':
-        result = {'project_id': project_id}
-        try:
-            #result = {}
-            url = None
-            desc_name = request.POST.get('descId', '')
-            start_from = request.POST.get('startfrom')
-            commit_msg = request.POST.get('commit_msg', '')
-            translator_id = request.POST.get('translator_id', '')
-            if start_from == 'new':
-                name_repo = request.POST.get('name_repo', '')
-                base_url_repo = request.POST.get('base_url_repo', '')
-                repo = Repository.objects.create(name=name_repo, base_url=base_url_repo)
-            else:
-                repo_id = request.POST.get('repo_id', '')
-                repo = Repository.objects.get(id=repo_id)
-                if repo is None:
-                    raise Exception("Repository Not Found")
-            result['repo'] = repo
-            user = CustomUser.objects.get(id=request.user.id)
-
-            projects = Project.objects.filter(id=project_id).select_subclasses()
-            if len(projects) == 0:
-                raise Exception("Project Not Found")
-            project_overview = projects[0].get_overview_data()
-            result['project_overview_data'] = project_overview
-            prj_token = project_overview['type']
-            url = prj_token + '/' + prj_token + '_push_report.html'
-            repo.fetch_repository()
-            report = projects[0].translate_push_ns_on_repository(translator_id, desc_name, repo, **{'repo_path': '/tmp/git_repo/' + repo.name,
-                                                                           'commit_msg': commit_msg if commit_msg is not '' else None})
-            #result['report'] = report
-
-        except Exception as e:
-            print e
-            url = 'error.html' if url is None else url
-            error_msg = 'Error push on git repo. \n'
-            if isinstance(e, git.GitCommandError):
-                error_msg += e.stdout + '\n'
-                error_msg += e.stderr + '\n'
-
-            result['error_msg'] = error_msg
-            return __response_handler(request, result, url)
-        print url
-    return __response_handler(request, result, url, to_redirect=False)
 
 @login_required
 def show_descriptors(request, project_id=None, descriptor_type=None):
