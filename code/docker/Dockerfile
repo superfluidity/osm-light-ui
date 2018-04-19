@@ -3,8 +3,11 @@ FROM python:2.7
 WORKDIR /usr/src/app
 COPY code .
 
-RUN npm install bower
-RUN bower install
+RUN apt-get update
+RUN apt-get -y install npm
+RUN npm install -g bower
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN bower install --allow-root
 RUN pip install -r requirements.txt
 
 
