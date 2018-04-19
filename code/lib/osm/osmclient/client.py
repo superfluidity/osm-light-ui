@@ -13,7 +13,7 @@ log = logging.getLogger('helper.py')
 
 
 class Client(object):
-    def __init__(self, host=os.getenv('OSM_SERVER',"69.30.240.75"), so_port=9999, so_project='admin', ro_host=None, ro_port=9090, **kwargs):
+    def __init__(self, host=os.getenv('OSM_SERVER',"localhost"), so_port=9999, so_project='admin', ro_host=None, ro_port=9090, **kwargs):
 #os.getenv('OSM_SERVER', "localhost")
         ##print os.getenv('OSM_SERVER',"40.86.191.138")
         self._user = 'admin'
