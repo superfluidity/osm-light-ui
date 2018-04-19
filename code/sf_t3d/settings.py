@@ -29,8 +29,8 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "sf_user.CustomUser"
 
-SITE_NAME = "RDCL 3D"
-SHORT_SITE_NAME = "RDCL"
+SITE_NAME = "OSM Light Weight UI"
+SHORT_SITE_NAME = "OSM-LW-UI"
 
 LOGIN_URL = '/auth/'
 LOGOUT_URL = '/auth/'
