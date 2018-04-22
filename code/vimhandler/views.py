@@ -1,9 +1,14 @@
-from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, JsonResponse
+from lib.osm.osmclient.client import Client
 import json
 import logging
+
+
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger('helper.py')
+
 
 datacenters = [
     {
@@ -48,23 +53,41 @@ datacenters = [
 
 
 def list(request):
+    client = Client()
+    result = client.vim_list()
+    print result
     result = {
-        "datacenters": datacenters
+        "datacenters": result
     }
     return __response_handler(request, result, 'vim_list.html')
 
 
 def create(request):
     result = {}
-    return __response_handler(request, result, 'vim:list', to_redirect=True)
+    if request.method == 'GET':
+        return __response_handler(request, result, 'vim_create.html')
+    else:
+        new_vim_dict= request.POST.dict()
+        print new_vim_dict
+        client = Client()
+        del new_vim_dict['csrfmiddlewaretoken']
+        result = client.vim_create(new_vim_dict)
+        print result
+        return __response_handler(request, result, 'vim:list', to_redirect=True)
 
 
 def delete(request, vim_id=None):
-    result = {}
-    return __response_handler(request, result, 'vim:list', to_redirect=True)
+    try:
+        client = Client()
+        del_res = client.vim_delete(vim_id)
+    except Exception as e:
+        log.exception(e)
+    return __response_handler(request, {}, 'vim:list', to_redirect=True)
 
 
 def show(request, vim_id=None):
+    client = Client()
+    result = client.vim_list()
     datacenter = next((x for x in datacenters if x['uuid'] == vim_id), None)
     print datacenter
     return __response_handler(request, {

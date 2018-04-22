@@ -511,27 +511,6 @@ def unused_vnf(request, project_id=None, nsd_id=None):
 # end ETSI specific method #
 
 
-# TOSCA specific method #
-@login_required
-def generatehottemplate(request, project_id=None, project=None, descriptor_id=None, descriptor_type=None):
-    """It is one of the custom_action methods
-        Heat Orchestration Template
-    NB The project is already extracted from project_id in the generic custom_action method
-    """
-    result = {}
-    error_msg = None
-    try:
-        result = project.get_generatehotemplate(request, descriptor_id, descriptor_type)
-    except Exception as e:
-        error_msg = e
-
-    if error_msg is not None:
-        return JsonResponse({'error': {'error_msg': str(error_msg)}})
-
-    return JsonResponse({'hot':  str(result)})
-
-# end TOSCA specific method #
-
 # OSM specific method #
 def get_package_files_list(request, project_id, project, descriptor_id, descriptor_type):
     files_list = []
@@ -585,44 +564,6 @@ def custom_action(request, project_id=None, descriptor_id=None, descriptor_type=
         return globals()[action_name](request, project_id, projects[0], descriptor_id, descriptor_type)
 
 
-## Repo section
-@login_required
-def repos_list(request):
-    raw_content_types = request.META.get('HTTP_ACCEPT', '*/*').split(',')
-    url = None
-    result = {}
-    try:
-        options = {}
-        for key in ('name'):
-            value = request.GET.get(key)
-            if value:
-                options[key] = value
-        repos = Repository.objects.filter(**options).values()
-        if 'application/json' in raw_content_types:
-            result = {'repos': list(repos)}
-        else:
-            url = 'repository/repo_list.html'
-            result = {'repos': list(repos)}
-
-    except Exception as e:
-        print e
-        url = 'error.html'
-        result = {'error_msg': 'Agents not found.'}
-    return __response_handler(request, result, url)
-
-@login_required
-def create_new_repo(request):
-    if request.method == 'POST':
-        try:
-            name = request.POST.get('name', '')
-            base_url = request.POST.get('base_url', ' ')
-            Repository.objects.create(name=name, base_url=base_url)
-        except Exception as e:
-            print e
-            url = 'error.html'
-            result = {'error_msg': 'Error creating ' + type + ' Repository! Please retry.'}
-            return __response_handler(request, result, url)
-        return redirect('repos:repos_list')
 
 @login_required
 def delete_repo(request, repo_id=None):
@@ -635,25 +576,6 @@ def delete_repo(request, repo_id=None):
         url = 'error.html'
         result = {'error_msg': 'Error deleting ' + repo_id + ' Repository! Please retry.'}
     return __response_handler(request, result, url, to_redirect=True)
-
-
-def translators_type_list(request):
-    raw_content_types = request.META.get('HTTP_ACCEPT', '*/*').split(',')
-    url = None
-    result = {}
-    try:
-
-        if 'application/json' in raw_content_types:
-            result = {'translator_type': [
-                {'id': 0, 'name': 'Ansible playbook with Heat', 't_id': 'sf2heat'},
-                {'id': 1, 'name': 'Ansible playbook with K8s', 't_id': 'k8sansible'},
-            ]}
-
-    except Exception as e:
-        print e
-        url = 'error.html'
-        result = {'error_msg': 'Unknown error.'}
-    return __response_handler(request, result, url)
 
 
 def __response_handler(request, data_res, url=None, to_redirect=None, *args, **kwargs):

@@ -13,7 +13,7 @@ log = logging.getLogger('helper.py')
 
 
 class Client(object):
-    def __init__(self, host=os.getenv('OSM_SERVER',"localhost"), so_port=9999, so_project='admin', ro_host=None, ro_port=9090, **kwargs):
+    def __init__(self, host=os.getenv('OSM_SERVER',"192.168.1.91"), so_port=9999, so_project='admin', ro_host=None, ro_port=9090, **kwargs):
 #os.getenv('OSM_SERVER', "localhost")
         ##print os.getenv('OSM_SERVER',"40.86.191.138")
         self._user = 'admin'
@@ -36,6 +36,36 @@ class Client(object):
         token = self._send_post(token_url, None, postfields_dict, headers={"Content-Type": "application/yaml", "accept": "application/json"})
         if token is not None:
             return token['id']
+        return None
+
+    def vim_list(self):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            self._headers['accept'] = 'application/json'
+            _url = "{0}/admin/v1/vims".format(self._base_path)
+            return self._send_get(_url, headers=self._headers)
+
+    def vim_delete(self, id):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            self._headers['accept'] = 'application/json'
+            _url = "{0}/admin/v1/vims/{1}".format(self._base_path, id)
+            return self._send_delete(_url, headers=self._headers)
+        return None
+
+    def vim_create(self, vim_data):
+        token = self.get_token()
+        headers = {}
+        if token:
+            headers['Authorization'] = 'Bearer {}'.format(token)
+            headers['Content-Type'] = 'application/json'
+            headers['accept'] = 'application/json'
+
+            _url = "{0}/admin/v1/vims".format(self._base_path)
+            return self._send_post(_url, headers=headers,
+                                  json=vim_data)
         return None
 
     def nsd_list(self):
@@ -67,6 +97,7 @@ class Client(object):
             _url = "{0}/nsd/v1/ns_descriptors_content/{1}".format(self._base_path, id)
             return self._send_delete(_url, headers=self._headers)
         return None
+
     def nsd_update(self, id, data):
         token = self.get_token()
         if token:
@@ -241,9 +272,11 @@ class Client(object):
     def _send_delete(self, url, params=None, **kwargs):
         try:
             r = requests.delete(url, params=None, verify=False, **kwargs)
+            print r.text
+            print "niente"
         except Exception as e:
             log.exception(e)
-            #print "Exception during send DELETE"
+            print "Exception during send DELETE"
             return {'error': 'error during connection to agent'}
         return Util.json_loads_byteified(r.text)
 

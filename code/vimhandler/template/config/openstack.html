@@ -1,0 +1,184 @@
+<div class="panel" id="openstack_config" style="display: none;">
+    <h5 class="box-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#openstack_config_collapse">
+            Config parameters
+        </a>
+    </h5>
+    <div id="openstack_config_collapse" class="panel-collapse collapse ">
+
+    <div class="col-lg-6">
+
+        <div class="row">
+            <div class="form-group">
+                <label for="ostack_sdn_ctrl" class="col-sm-4 control-label">SDN Controller</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="ostack_sdn_ctrl" name="sdn_controller" placeholder="SDN Controller">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="ostack_ssdn_port_map" class="col-sm-4 control-label">SDN Port Mapping</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="ostack_ssdn_port_map" name="sdn_port_mapping"
+                           placeholder="SDN Port Mapping">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="ostack_security_groups" class="col-sm-4 control-label">Security Groups</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="ostack_security_groups" name="security_groups"
+                           placeholder="Security Groups">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="availability_zone" class="col-sm-4 control-label">Availability Zone</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="availability_zone" name="availability_zone"
+                           placeholder="Availability Zone">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="ostack_region_name" class="col-sm-4 control-label">Region Name</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="ostack_region_name" name="region_name" placeholder="Region Name">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="option_insecure" class="col-sm-4 control-label">Insecure</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <select id="option_insecure" name="insecure" class="form-control">
+                        <option value="" disabled selected>None</option>
+                        <option value=true>True</option>
+                        <option value=false>False</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="use_existing_flavors" class="col-sm-4 control-label">Use existing flavors</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <select id="use_existing_flavors" name="use_existing_flavors" class="form-control">
+                        <option value="" disabled selected>None</option>
+                        <option value=true>True</option>
+                        <option value=false>False</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="use_internal_endpoint" class="col-sm-4 control-label">Use internal endpoint</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <select id="use_internal_endpoint" name="use_internal_endpoint" class="form-control">
+                        <option value="" disabled selected>None</option>
+                        <option value=true>True</option>
+                        <option value=false>False</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="APIversion" class="col-sm-4 control-label">API version</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="APIversion" name="APIversion" placeholder="API version">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="form-group">
+                <label for="project_domain_id" class="col-sm-4 control-label">Project domain id</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="project_domain_id" name="project_domain_id"
+                           placeholder="Project domain id">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="project_domain_name" class="col-sm-4 control-label">Project domain name</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="project_domain_name" name="project_domain_name"
+                           placeholder="Project domain name">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="user_domain_id" class="col-sm-4 control-label">User domain id</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="user_domain_id" name="user_domain_id" placeholder="User domain id">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="user_domain_name" class="col-sm-4 control-label">User domain name</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="user_domain_name" name="user_domain_name"
+                           placeholder="User domain name">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="keypair" class="col-sm-4 control-label">Keypair</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="keypair" name="keypair" placeholder="Keypair">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="dataplane_physical_net" class="col-sm-4 control-label">Dataplane physical net</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="dataplane_physical_net" name="dataplane_physical_net"
+                           placeholder="Dataplane physical net">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="use_floating_ip" class="col-sm-4 control-label">Use floating ip</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <select id="use_floating_ip" name="use_floating_ip" class="form-control">
+                        <option value="" disabled selected>None</option>
+                        <option value=true>True</option>
+                        <option value=false>False</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="dataplane_net_vlan_range" class="col-sm-4 control-label">Dataplane net vlan range</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="dataplane_net_vlan_range" name="dataplane_net_vlan_range"
+                           placeholder="dataplane net vlan range">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="microversion" class="col-sm-4 control-label">Microversion</label>
+                <div class="col-sm-6 input-group input-group-sm">
+                    <input disabled class="form-control config-input" id="microversion" name="microversion" placeholder="Microversion">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

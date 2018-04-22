@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load get %}
 {% load staticfiles %}
 {% block head_base %}
     {% with skin_css="AdminLTE/dist/css/skins/skin-purple.min.css"%}
@@ -51,7 +51,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Registered VIM</h3>
                     <div class="box-tools">
-                        <a href="javascript:newVimModal()" class="btn btn-block btn-primary btn-sm"><i
+                        <a href='{% url "vim:create" %}' class="btn btn-block btn-primary btn-sm"><i
                                 class="fa fa-plus"></i><span> New VIM</span></a>
                     </div>
                 </div>
@@ -59,10 +59,11 @@
                     <table id="projects_table" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>UUID</th>
+                            <th>Id</th>
                             <th>Name</th>
                             <th>Type</th>
-                            <th>Creation Date</th>
+                            <th>Tenant name</th>
+                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -70,18 +71,19 @@
                         {% for p in datacenters %}
                             <tr>
 
-                                <td>{{ p.uuid }}</td>
-                                <td>{{ p.name }}</td>
-                                <td>{{ p.type }}</td>
-                                <td>{{ p.created_at }}</td>
+                                <td>{{ p|get:"_id" }}</td>
+                                <td>{{ p|get:"name" }}</td>
+                                <td>{{ p|get:"vim_type" }}</td>
+                                <td>{{ p|get:"vim_tenant_name" }}</td>
+                                <td>{{ p|get:"description" }}</td>
 
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:showVimDetails('{{ p.uuid }}')"><i
+                                                onclick="javascript:showVimDetails('{{ p|get:"_id" }}')"><i
                                                 class="fa fa-info"></i></button>
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:deleteVim('{{ p.uuid }}')"><i
+                                                onclick="javascript:deleteVim('{{ p|get:"_id" }}')"><i
                                                 class="fa fa-trash-o"></i></button>
                                     </div>
                                 </td>
@@ -102,9 +104,6 @@
     <!-- Utility JS -->
 
     <script>
-        function newVimModal() {
-            $('#modal_new_vim').modal('show');
-        }
 
         function showVimDetails(uuid) {
             var dialog = bootbox.dialog({
