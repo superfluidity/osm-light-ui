@@ -105,41 +105,6 @@
     <!-- Utility JS -->
 
     <script>
-        /*
-        function showVimDetails(uuid) {
-            var dialog = bootbox.dialog({
-                message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
-                closeButton: true
-            });
-            $.ajax({
-                url: '/vims/' + uuid + '/',
-                type: 'GET',
-                dataType: "json",
-                contentType: "application/json;charset=utf-8",
-                success: function (result) {
-                    //$('#modal_show_vim_body').empty();
-                    console.log(result)
-                    if(result['datacenter']){
-                        var $inputs = $('#modal_show_vim').find(':input');
-                        $inputs.val('');
-                        for(i in result['datacenter']){
-                            console.log(i);
-                            var val = result['datacenter'][i];
-                            $inputs.filter('[name="' + i + '"]').val(val);
-
-                        }
-
-                    }
-                    dialog.modal('hide');
-                    $('#modal_show_vim').modal('show');
-                },
-                error: function (result) {
-                    dialog.modal('hide');
-                    bootbox.alert("An error occurred while retrieving the information for the Vim");
-                }
-            });
-            //$('#modal_show_vim').modal('show');
-        }*/
 
         function deleteVim(vim_uuid) {
             bootbox.confirm("Are you sure want to delete?", function (result) {
@@ -147,7 +112,6 @@
                     location.href = '/vims/' + vim_uuid + '/delete'
                 }
             })
-
         }
     </script>
 

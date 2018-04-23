@@ -7,6 +7,7 @@ import logging
 from lib.osm.osmclient.client import Client
 
 
+@login_required
 def list(request, type=None):
 
     client = Client()
@@ -15,7 +16,7 @@ def list(request, type=None):
 
     return __response_handler(request, {'instances': result, 'type': 'ns'}, 'instance_list.html')
 
-
+@login_required
 def create(request):
 
     result = {}
@@ -32,17 +33,20 @@ def create(request):
     }
     print ns_data
     client = Client()
-    result =  client.ns_create(ns_data)
+    result = client.ns_create(ns_data)
     return  __response_handler(request, result, 'instances:list', to_redirect=True, type='ns')
 
-
+@login_required
 def delete(request, instance_id=None, type=None):
     result = {}
     return __response_handler(request, result, 'instances:list', to_redirect=True)
 
-
+@login_required
 def show(request, instance_id=None, type=None):
-    result = {}
+    #result = {}
+    client = Client()
+    result = client.ns_get(instance_id)
+    print result
     return __response_handler(request, result)
 
 

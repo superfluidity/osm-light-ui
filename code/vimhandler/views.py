@@ -8,7 +8,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('helper.py')
 
-
+@login_required
 def list(request):
     client = Client()
     result = client.vim_list()
@@ -18,7 +18,7 @@ def list(request):
     }
     return __response_handler(request, result, 'vim_list.html')
 
-
+@login_required
 def create(request):
     result = {}
     if request.method == 'GET':
@@ -55,7 +55,7 @@ def create(request):
         # TODO  'vim:show', to_redirect=True, vim_id=vim_id
         return __response_handler(request, result, 'vim:list', to_redirect=True)
 
-
+@login_required
 def delete(request, vim_id=None):
     try:
         client = Client()
@@ -64,7 +64,7 @@ def delete(request, vim_id=None):
         log.exception(e)
     return __response_handler(request, {}, 'vim:list', to_redirect=True)
 
-
+@login_required
 def show(request, vim_id=None):
     client = Client()
     datacenter = client.vim_get(vim_id)

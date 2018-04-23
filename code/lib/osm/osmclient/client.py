@@ -174,6 +174,16 @@ class Client(object):
                                   json=ns_data)
         return None
 
+    def ns_get(self, id):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            self._headers['Content-Type'] = 'application/json'
+            self._headers['accept'] = 'application/json'
+            _url = "{0}/nslcm/v1/ns_instances_content/{1}".format(self._base_path, id)
+            return self._send_get(_url, headers=self._headers)
+        return None
+
     def vnfd_list(self):
         token = self.get_token()
         if token:

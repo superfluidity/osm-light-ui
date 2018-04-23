@@ -22,7 +22,12 @@
 
 {% block head_block %}
     {{ block.super }}
-
+    <!-- Codemirror core CSS -->
+    <link rel="stylesheet" href="/static/bower_components/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/static/bower_components/codemirror/addon/fold/foldgutter.css" />
+    <link rel="stylesheet" href="/static/bower_components/codemirror/theme/neat.css">
+    <link rel="stylesheet" href="/static/bower_components/codemirror/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="/static/bower_components/codemirror/addon/display/fullscreen.css">
 {% endblock %}
 {% block title_header_big %}
     {{ block.super }}
@@ -105,7 +110,7 @@
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href=""><i class="fa fa-info fa-fw"></i>info</a></li>
+                                                <a href="javascript:showInstanceDetails('{{ i|get:"_id" }}')"><i class="fa fa-info fa-fw"></i>info</a></li>
                                             <li class="divider"></li>
                                             <li>
                                                 <a href="javascript:deleteNs('{{ i|get:"_id" }}')"><i class="fa fa-trash-o fa-fw"></i>Delete</a></li>
@@ -122,23 +127,101 @@
         </div>
 
     </div>
+{% include 'modal/instance_show.html' %}
 {% endblock %}
 
 {% block resource_block %}
     {{ block.super }}
     <!-- Utility JS -->
 
-    <script>
+    <script src="/static/bower_components/codemirror/lib/codemirror.js"></script>
+    <script src="/static/bower_components/codemirror/addon/fold/foldcode.js"></script>
+    <script src="/static/bower_components/codemirror/addon/fold/foldgutter.js"></script>
+    <script src="/static/bower_components/codemirror/addon/fold/brace-fold.js"></script>
+    <script src="/static/bower_components/codemirror/mode/javascript/javascript.js"></script>
+    <script src="/static/bower_components/codemirror/mode/xml/xml.js"></script>
+    <script src="/static/bower_components/codemirror/mode/yaml/yaml.js"></script>
+    <script src="/static/bower_components/codemirror/mode/markdown/markdown.js"></script>
+    <script src="/static/bower_components/codemirror/addon/search/searchcursor.js"></script>
+    <script src="/static/bower_components/codemirror/addon/search/search.js"></script>
+    <script src="/static/bower_components/codemirror/addon/dialog/dialog.js"></script>
+    <script src="/static/bower_components/codemirror/addon/display/autorefresh.js"></script>
+    <script src="/static/bower_components/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="/static/bower_components/codemirror/addon/edit/closebrackets.js"></script>
+    <script src="/static/bower_components/codemirror/addon/display/fullscreen.js"></script>
+    <script src="/static/bower_components/codemirror/keymap/sublime.js"></script>
 
-        function deleteNs(ns_uuid) {
-            bootbox.confirm("Are you sure want to delete?", function (result) {
-                if (result) {
-                    location.href = '/ns/' + ns_uuid + '/delete'
-                }
-            })
+<script>
 
-        }
-    </script>
+
+    function deleteNs(ns_uuid) {
+        bootbox.confirm("Are you sure want to delete?", function (result) {
+            if (result) {
+                location.href = '/instances/ns/' + ns_uuid + '/delete'
+            }
+        })
+    }
+
+    function showInstanceDetails(uuid) {
+        var dialog = bootbox.dialog({
+            message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+            closeButton: true
+        });
+        $.ajax({
+            url: '/instances/ns/' + uuid + '/',
+            type: 'GET',
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (result) {
+                //$('#modal_show_vim_body').empty();
+                console.log(result);
+                editorJSON.setValue(JSON.stringify(result, null, "\t"));
+                editorJSON.setOption("autoRefresh", true);
+                dialog.modal('hide');
+                $('#modal_show_instance').modal('show');
+            },
+            error: function (result) {
+                dialog.modal('hide');
+                bootbox.alert("An error occurred while retrieving the information for the NS");
+            }
+        });
+    }
+    var editorJSON;
+
+    $(document).ready(function () {
+        var json_editor_settings = {
+        mode: "javascript",
+        showCursorWhenSelecting: true,
+        autofocus: true,
+        lineNumbers: true,
+        lineWrapping: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        extraKeys: {
+            "F11": function (cm) {
+                cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+            },
+            "Esc": function (cm) {
+                if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+            },
+            "Ctrl-Q": function (cm) {
+                cm.foldCode(cm.getCursor());
+            }
+        },
+        theme: "neat",
+        keyMap: "sublime",
+    };
+        var myJsonTextArea = document.getElementById("instance_view_json");
+        editorJSON = CodeMirror(function (elt) {
+            myJsonTextArea.parentNode.replaceChild(elt, myJsonTextArea);
+        }, json_editor_settings);
+
+
+        //
+    });
+</script>
 
 {% endblock %}
 

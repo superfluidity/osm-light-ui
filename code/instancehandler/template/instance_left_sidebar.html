@@ -3,38 +3,57 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <!-- sidebar menu: : style can be found in sidebar.less -->
-        <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
-            {% url "home" as  home_url %}
-            <li {% if request.get_full_path == home_url %} class="active" {% endif %} ><a href='{% url "home" %}'><i class="fa fa-home fa-fw"></i><span>Home</span></a></li>
-                        <li class="header">PROJECT</li>
-                {% url "projects:open_project"  project_id=1 as  project_url %}
-                <li {% if request.get_full_path == project_url %} class="active" {% endif %} ><a href='{% url "projects:open_project"  project_id=1%}'><i class="fa fa-file-text fa-fw"></i><span>Overview</span></a>
-                </li>
-                {% url "projects:show_descriptors"  project_id=1 descriptor_type='nsd' as  nsd_list_url %}
-                {% url "projects:show_descriptors"  project_id=1 descriptor_type='vnfd' as  vnfd_list_url %}
-                <li {% if request.get_full_path == nsd_list_url %} class="active treeview" {% endif %} >
+        <ul class="sidebar-menu tree" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+
+          <li><a href="/home"><i class="fa fa-home fa-fw"></i><span>Home</span></a></li>
+          <li class="header">PROJECT</li>
+
+          <li >
+              <a href="/projects/1/">
+                  <i class="fa fa-file-text fa-fw"></i><span>Overview</span>
+              </a>
+          </li>
+
+
+        <li class="treeview">
                 <a href="#">
                     <i class="fa fa-archive fa-fw"></i> <span>Packages</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
-                <ul class="treeview-menu">
-                    {% url "projects:show_descriptors"  project_id=1 descriptor_type='nsd' as  nsd_list_url %}
-                    <li {% if request.get_full_path == nsd_list_url %} class="active" {% endif %}><a href="/projects/1/descriptors/nsd"><i class="fa fa-archive fa-fw"></i>NS Packages</a></li>
-                    {% url "projects:show_descriptors"  project_id=1 descriptor_type='vnfd' as  vnfd_list_url %}
-                    <li {% if request.get_full_path == vnfd_list_url %} class="active" {% endif %}><a href="/projects/1/descriptors/vnfd"><i class="fa fa-archive fa-fw"></i>VNF Packages</a></li>
+                <ul class="treeview-menu" style="display: none;">
+
+                    <li>
+                        <a href="/projects/1/descriptors/nsd">
+                            <i class="fa fa-archive fa-fw"></i>NS Packages
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/projects/1/descriptors/vnfd">
+                            <i class="fa fa-archive fa-fw"></i>VNF Packages
+                        </a>
+                    </li>
 
                 </ul>
             </li>
-            {% url "instances:list"  type='ns' as  instance_ns_list_url %}
-            <li {% if request.get_full_path == instance_ns_list_url %} class="active" {% endif %} ><a href='{% url "instances:list"  type='ns'%}'><i class="fa fa-list fa-fw"></i><span>NS Instances</span></a>
-            <li class="header">Config</li>
-            {% url "vim:list"  type='ns' as  vim_list_url %}
-             <li {% if request.get_full_path == vim_list_url %} class="active" {% endif %}><a href='{% url "vim:list" %}'><i class="fa fa-list fa-fw"></i><span>VIM Accounts</span></a></li>
 
-        </ul>
+            <li class="active">
+                <a href="/instances/ns/list/">
+                    <i class="fa fa-list fa-fw"></i><span>NS Instances</span>
+                </a>
+            </li>
+            <li class="header">CONFIG</li>
+
+             <li>
+                 <a href="/vims/list/">
+                     <i class="fa fa-list fa-fw"></i><span>VIM Accounts</span>
+                 </a>
+             </li>
+
+      </ul>
     </section>
     <!-- /.sidebar -->
 </aside>

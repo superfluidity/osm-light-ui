@@ -25,21 +25,11 @@ from lib.util import Util
 from sf_user.models import CustomUser
 import tarfile
 
-# DO NOT REMOVE THIS COMMENT #
-# Project Models #
-from projecthandler.osm_model import OsmProject
-# from projecthandler.cran_model import CranProject
-# from projecthandler.nemo_model import NemoProject
-# from projecthandler.toscanfv_model import ToscanfvProject
-# from projecthandler.superfluidity_model import SuperfluidityProject
-# from projecthandler.oshi_model import OshiProject
-# from projecthandler.click_model import ClickProject
-# from projecthandler.etsi_model import EtsiProject
-from projecthandler.models import Project
-#from projecthandler.tosca_model import ToscaProject
 
-# DO NOT REMOVE THIS COMMENT #
-# Project Model Type declarations #
+from projecthandler.osm_model import OsmProject
+from projecthandler.models import Project
+
+
 Project.add_project_type('osm', OsmProject)
 
 
