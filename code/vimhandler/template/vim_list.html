@@ -81,11 +81,11 @@
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:showVimDetails('{{ p|get:"_id" }}')"><i
+                                                onclick="location.href='{% url "vim:show" vim_id=p|get:"_id" %}'" data-toggle="tooltip" data-placement="top" title="Show Info"><i
                                                 class="fa fa-info"></i></button>
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:deleteVim('{{ p|get:"_id" }}')"><i
-                                                class="fa fa-trash-o"></i></button>
+                                                onclick="javascript:deleteVim('{{ p|get:"_id" }}')" data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                                class="fa fa-trash-o" ></i></button>
                                     </div>
                                 </td>
 
@@ -105,7 +105,7 @@
     <!-- Utility JS -->
 
     <script>
-
+        /*
         function showVimDetails(uuid) {
             var dialog = bootbox.dialog({
                 message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
@@ -139,7 +139,7 @@
                 }
             });
             //$('#modal_show_vim').modal('show');
-        }
+        }*/
 
         function deleteVim(vim_uuid) {
             bootbox.confirm("Are you sure want to delete?", function (result) {

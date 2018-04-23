@@ -282,7 +282,6 @@ class Client(object):
         try:
             r = requests.delete(url, params=None, verify=False, **kwargs)
             print r.text
-            print "niente"
         except Exception as e:
             log.exception(e)
             print "Exception during send DELETE"
