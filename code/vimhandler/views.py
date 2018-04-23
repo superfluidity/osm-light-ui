@@ -5,51 +5,8 @@ from lib.osm.osmclient.client import Client
 import json
 import logging
 
-
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('helper.py')
-
-
-datacenters = [
-    {
-        "uuid": "739cde4e-220c-11e8-a805-0242ac120006",
-        "vim_tenants": [
-            {
-                "vim_tenant_id": "asdasdas-220c-11e8-a805-0242ac120006",
-                "passwd": "******",
-                "config": "string",
-                "vim_tenant_name": "string",
-                "user": "string"
-            }
-        ],
-        "type": "openstack",
-        "description": "no description",
-        "name": "MyOpenStack",
-        "vim_url": "http://devstack.westeurope.cloudapp.azure.com/identity/v3",
-        "config": {},
-        "created_at": "2018-03-07T13:35:50",
-        "vim_url_admin": "http://devstack.westeurope.cloudapp.azure.com/identity/v3"
-    },
-    {
-        "uuid": "c000ec6c-220c-11e8-a805-0242ac120006",
-        "vim_tenants": [
-            {
-                "vim_tenant_id": "asdasdas-220c-11e8-a805-0242ac120006",
-                "passwd": "******",
-                "config": "string",
-                "vim_tenant_name": "string",
-                "user": "string"
-            }
-        ],
-        "type": "openstack",
-        "description": "vim-emu openstack",
-        "name": "emu-ba",
-        "vim_url": "http://localhost:6001/v2.0",
-        "config": {},
-        "created_at": "2018-03-07T13:37:59",
-        "vim_url_admin": "http://localhost:6001/v2.0"
-    }
-]
 
 
 def list(request):
@@ -67,12 +24,34 @@ def create(request):
     if request.method == 'GET':
         return __response_handler(request, result, 'vim_create.html')
     else:
-        new_vim_dict= request.POST.dict()
+        new_vim_dict = request.POST.dict()
         print new_vim_dict
         client = Client()
-        del new_vim_dict['csrfmiddlewaretoken']
-        result = client.vim_create(new_vim_dict)
-        print result
+        keys = ["schema_version",
+                "schema_type",
+                "name",
+                "vim_url",
+                "vim_type",
+                "vim_user",
+                "vim_password",
+                "vim_tenant_name",
+                "description"]
+        config_keys = {
+            "aws": ["region_name", "vpc_cidr_block", "security_groups", "key_pair", "flavor_info"],
+            "openstack": ["sdn_controller", "sdn_port_mapping", "security_groups", "availability_zone", "region_name",
+                          "insecure", "use_existing_flavors", "vim_type", "use_internal_endpoint", "APIversion",
+                          "project_domain_id", "project_domain_name", "user_domain_id", "user_domain_name", "keypair",
+                          "dataplane_physical_net", "use_floating_ip", "dataplane_net_vlan_range", "microversion"],
+            "vmware": ["sdn_controller", "sdn_port_mapping", "orgname", "admin_username", "admin_password",
+                       "nsx_manager", "nsx_user", "nsx_password", "vcenter_ip", "vcenter_port", "vcenter_user",
+                       "vcenter_password", "vrops_site", "vrops_user", "vrops_password"],
+            "openvim": ["sdn_controller", "sdn_port_mapping"]
+        }
+        vim_data = dict(filter(lambda i: i[0] in keys and len(i[1]) > 0, new_vim_dict.items()))
+        vim_data['config'] = dict(
+            filter(lambda i: i[0] in config_keys[vim_data['vim_type']] and len(i[1]) > 0, new_vim_dict.items()))
+
+        result = client.vim_create(vim_data)
         return __response_handler(request, result, 'vim:list', to_redirect=True)
 
 
@@ -87,8 +66,7 @@ def delete(request, vim_id=None):
 
 def show(request, vim_id=None):
     client = Client()
-    result = client.vim_list()
-    datacenter = next((x for x in datacenters if x['uuid'] == vim_id), None)
+    datacenter = client.vim_get(vim_id)
     print datacenter
     return __response_handler(request, {
         "datacenter": datacenter

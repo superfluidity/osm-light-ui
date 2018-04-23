@@ -138,7 +138,7 @@
                                 <div class="form-group">
                                     <label for="description" class="col-sm-3 control-label">Schema Version</label>
                                     <div class="col-sm-6 input-group input-group-sm">
-                                        <input class="form-control" id="schema_version" name="schema_version" placeholder="Schema Version" value="1.0" required>
+                                        <input class="form-control" id="schema_version" name="schema_version" placeholder="Schema Version" >
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@
             console.log("type selected: " + type_selected);
             var div_config_index = type_selected + '_config';
             $('#'+div_config_index).show();
-            //$('#'+div_config_index+' .config-input').prop('disabled', false);
+            $('#'+div_config_index+' .config-input').prop('disabled', false);
         }
     </script>
 

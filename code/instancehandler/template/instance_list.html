@@ -108,7 +108,7 @@
                                                 <a href=""><i class="fa fa-info fa-fw"></i>info</a></li>
                                             <li class="divider"></li>
                                             <li>
-                                                <a href=""><i class="fa fa-trash-o fa-fw"></i>Delete</a></li>
+                                                <a href="javascript:deleteNs('{{ i|get:"_id" }}')"><i class="fa fa-trash-o fa-fw"></i>Delete</a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -130,6 +130,14 @@
 
     <script>
 
+        function deleteNs(ns_uuid) {
+            bootbox.confirm("Are you sure want to delete?", function (result) {
+                if (result) {
+                    location.href = '/ns/' + ns_uuid + '/delete'
+                }
+            })
+
+        }
     </script>
 
 {% endblock %}

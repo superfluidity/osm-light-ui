@@ -6,68 +6,10 @@
                     <span aria-hidden="true">×</span></button>
                 <h4 class="modal-title" >Vim Details</h4>
             </div>
-            <form class="form-horizontal">
-                     {% csrf_token %}
-            <div class="modal-body" id="modal_show_vim_body">
-                <div class="form-group">
-                    <label for="name_view" class="col-sm-3 control-label">Name</label>
-                    <div class="col-sm-6">
-                        <input disabled class="form-control" id="name_view" name="name"
-                               placeholder="Vim name" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="type_view" class="col-sm-3 control-label">Type</label>
-                    <div class="col-sm-6">
-                        <input disabled class="form-control" id="type_view" name="type"
-                               placeholder="Vim type" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="description_view" class="col-sm-3 control-label">Description</label>
-                    <div class="col-sm-6">
-                        <input disabled class="form-control" id="description_view" name="description"
-                               placeholder="Description">
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="vim_tenant_name_view" class="col-sm-3 control-label">Tenant name</label>
-                    <div class="col-sm-6">
-                        <input disabled class="form-control" id="vim_tenant_name_view" name="vim_tenant_name"
-                               placeholder="Tenant name" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="vim_user_view" class="col-sm-3 control-label">Vim Username</label>
-                    <div class="col-sm-6">
-                        <input disabled class="form-control" id="vim_user_view" name="vim_user"
-                               placeholder="Vim Username" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="vim_password_view" class="col-sm-3 control-label">Vim Password</label>
-                    <div class="col-sm-6">
-                        <input disabled type="password" class="form-control" id="vim_password_view" name="vim_password"
-                               placeholder="Vim Password" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="vim_url_view" class="col-sm-3 control-label">Vim URL</label>
-                    <div class="col-sm-6">
-                        <input disabled type="url" class="form-control" id="vim_url_view" name="vim_url"
-                               placeholder="Vim URL" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="vim_url_admin_view" class="col-sm-3 control-label">Vim URL Admin</label>
-                    <div class="col-sm-6">
-                        <input disabled type="url" class="form-control" id="vim_url_admin_view" name="vim_url_admin"
-                               placeholder="Vim URL Admin" required>
-                    </div>
-                </div>
+            <div class="modal-body" id="modal_show_vim_body">
+
             </div>
-            </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>

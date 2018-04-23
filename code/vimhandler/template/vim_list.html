@@ -41,7 +41,6 @@
 
 {% block content_body %}
     {{ block.super }}
-    {% include 'modal/vim_create.html' %}
     {% include 'modal/vim_details.html' %}
     {% csrf_token %}
     <div class="row">
@@ -62,20 +61,22 @@
                             <th>Id</th>
                             <th>Name</th>
                             <th>Type</th>
-                            <th>Tenant name</th>
+                            <th>Operational State</th>
                             <th>Description</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for p in datacenters %}
+
                             <tr>
 
                                 <td>{{ p|get:"_id" }}</td>
                                 <td>{{ p|get:"name" }}</td>
                                 <td>{{ p|get:"vim_type" }}</td>
-                                <td>{{ p|get:"vim_tenant_name" }}</td>
+                                <td>{{ p|get_sub:"_admin,operationalState"}}</td>
                                 <td>{{ p|get:"description" }}</td>
+
 
                                 <td>
                                     <div class="btn-group">
