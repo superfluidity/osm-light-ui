@@ -50,7 +50,8 @@ def create(request):
         vim_data = dict(filter(lambda i: i[0] in keys and len(i[1]) > 0, new_vim_dict.items()))
         vim_data['config'] = dict(
             filter(lambda i: i[0] in config_keys[vim_data['vim_type']] and len(i[1]) > 0, new_vim_dict.items()))
-
+        if vim_data['vim_type'] == 'openstack':
+            vim_data['config']['vim_type'] = "vio"
         result = client.vim_create(vim_data)
         # TODO  'vim:show', to_redirect=True, vim_id=vim_id
         return __response_handler(request, result, 'vim:list', to_redirect=True)
