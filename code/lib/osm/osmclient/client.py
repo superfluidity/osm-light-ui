@@ -134,8 +134,7 @@ class Client(object):
                 for chunk in package.chunks():
                     destination.write(chunk)
             headers['Content-File-MD5'] = self.md5(open('/tmp/'+package.name, 'rb'))
-            ##print type(open('cirros_2vnf_ns.tar.gz', 'rb').read())
-            #r = requests.post(url='http://upload.example.com', data={'title': 'test_file},  files =  {'file':package})
+
             _url = "{0}/nsd/v1/ns_descriptors_content/".format(self._base_path)
             return self._send_post(_url, headers=headers,
                                   data=open('/tmp/'+package.name, 'rb'))
@@ -182,6 +181,16 @@ class Client(object):
             self._headers['accept'] = 'application/json'
             _url = "{0}/nslcm/v1/ns_instances_content/{1}".format(self._base_path, id)
             return self._send_get(_url, headers=self._headers)
+        return None
+
+    def ns_delete(self, id):
+        token = self.get_token()
+        if token:
+            self._headers['Authorization'] = 'Bearer {}'.format(token)
+            #self._headers['Content-Type'] = 'application/yaml'
+            self._headers['accept'] = 'application/json'
+            _url = "{0}/nslcm/v1/ns_instances_content/{1}".format(self._base_path, id)
+            return self._send_delete(_url, headers=self._headers)
         return None
 
     def vnfd_list(self):
@@ -291,12 +300,13 @@ class Client(object):
     def _send_delete(self, url, params=None, **kwargs):
         try:
             r = requests.delete(url, params=None, verify=False, **kwargs)
+            len(r.content)
             print r.text
         except Exception as e:
             log.exception(e)
             print "Exception during send DELETE"
             return {'error': 'error during connection to agent'}
-        return Util.json_loads_byteified(r.text)
+        return r.json
 
     def md5(self, f):
         hash_md5 = hashlib.md5()

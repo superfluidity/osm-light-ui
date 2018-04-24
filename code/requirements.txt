@@ -4,7 +4,6 @@ django-model-utils==2.6
 functools32==3.2.3.post2
 jsonfield==1.0.3
 jsonschema==2.5.1
-networkx==1.11
 pbr==1.10.0
 pyaml==15.8.2
 pymongo==3.4.0

@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, JsonResponse
@@ -39,7 +38,10 @@ def create(request):
 @login_required
 def delete(request, instance_id=None, type=None):
     result = {}
-    return __response_handler(request, result, 'instances:list', to_redirect=True)
+    client = Client()
+    result = client.ns_delete(instance_id)
+    print result
+    return __response_handler(request, result, 'instances:list', to_redirect=True, type='ns')
 
 @login_required
 def show(request, instance_id=None, type=None):
