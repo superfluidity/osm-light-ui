@@ -268,10 +268,7 @@ def clone_descriptor(request, project_id=None, descriptor_type=None, descriptor_
     project_overview = projects[0].get_overview_data()
     prj_token = project_overview['type']
     page = prj_token + '/' + prj_token + '_project_descriptors.html'
-    # if project_overview['type'] == 'etsi':
-    #     page = 'etsi/etsi_project_descriptors.html'
-    # elif project_overview['type'] == 'click':
-    #     page = 'click/click_project_descriptors.html'
+
     return render(request, page, {
         'descriptors': projects[0].get_descriptors(descriptor_type),
         'project_id': project_id,
@@ -348,9 +345,9 @@ def edit_descriptor(request, project_id=None, descriptor_id=None, descriptor_typ
         response_data = {
             'project_id': project_id,
             'descriptor_type': descriptor_type,
-            'project_overview_data': projects[0].get_overview_data(),
+            #'project_overview_data': projects[0].get_overview_data(),
             'alert_message': {
-                'success': result,
+                'success':  True if result else False,
                 'message': "Descriptor modified." if result else 'Error during descriptor editing.'}
         }
         status_code = 200 if result else 500
@@ -551,23 +548,8 @@ def custom_action(request, project_id=None, descriptor_id=None, descriptor_type=
         return globals()[action_name](request, project_id, projects[0], descriptor_id, descriptor_type)
 
 
-
-@login_required
-def delete_repo(request, repo_id=None):
-    try:
-        Repository.objects.filter(id=repo_id).delete()
-        url = 'repos:repos_list'
-        result = {}
-    except Exception as e:
-        print e
-        url = 'error.html'
-        result = {'error_msg': 'Error deleting ' + repo_id + ' Repository! Please retry.'}
-    return __response_handler(request, result, url, to_redirect=True)
-
-
 def __response_handler(request, data_res, url=None, to_redirect=None, *args, **kwargs):
     raw_content_types = request.META.get('HTTP_ACCEPT', '*/*').split(',')
-    #print raw_content_types, data_res, url, to_redirect
     if 'application/json' in raw_content_types:
         return JsonResponse(data_res)
     elif to_redirect:

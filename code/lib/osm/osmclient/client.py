@@ -3,6 +3,7 @@ import logging
 import json
 import tarfile
 import yaml
+import pyaml
 import StringIO
 from lib.util import Util
 import hashlib
@@ -107,20 +108,49 @@ class Client(object):
             return self._send_delete(_url, headers=self._headers)
         return None
 
+    def _descriptor_update(self, tarf, data):
+        print tarf.getnames()
+        # extract the package on a tmp directory
+        tarf.extractall('/tmp')
+
+        for name in tarf.getnames():
+            if name.endswith(".yaml") or name.endswith(".yml"):
+                with open('/tmp/' + name, 'w') as outfile:
+                    yaml.safe_dump(data, outfile, default_flow_style=False)
+                break
+
+        tarf_temp = tarfile.open('/tmp/' + tarf.getnames()[0] + ".tar.gz", "w:gz")
+        # tarf_temp = tarfile.open("pippo.tar.gz", "w:gz")
+        print tarf_temp.getnames()
+        # tarf_temp.add('/tmp/'+tarf.getnames()[0])
+        for tarinfo in tarf:
+            # if tarinfo.name.startswith(tarf.getnames()[0]):
+            #    new_name = tarinfo.name[len(tarf.getnames()[0]):]
+            tarf_temp.add('/tmp/' + tarinfo.name, tarinfo.name, recursive=False)
+        print tarf_temp.getnames()
+        tarf_temp.close()
+        return tarf
+
     def nsd_update(self, id, data):
         token = self.get_token()
+        headers = {}
         if token:
+            # get the package onboarded
             tar_pkg = self.get_nsd_pkg(id)
+            tarf = tarfile.open(fileobj=tar_pkg)
 
-            for tarinfo in tar_pkg:
-                print(tarinfo.name, "is", tarinfo.size, "bytes in size and is")
-                if tarinfo.isreg():
-                    print("a regular file.")
-                elif tarinfo.isdir():
-                    print("a directory.")
-                else:
-                    print("something else.")
-        return True
+            tarf = self._descriptor_update(tarf, data)
+            headers['Authorization'] = 'Bearer {}'.format(token)
+            headers['Content-Type'] = 'application/gzip'
+            headers['accept'] = 'application/json'
+            headers['Content-File-MD5'] = self.md5(open('/tmp/' + tarf.getnames()[0] + ".tar.gz", 'rb'))
+            #headers['Content-File-MD5'] = self.md5(open("pippo.tar.gz", 'rb'))
+
+            _url = "{0}/nsd/v1/ns_descriptors/{1}/nsd_content".format(self._base_path, id)
+            return self._send_put(_url, headers=headers, data=open('/tmp/'+tarf.getnames()[0] + ".tar.gz", 'rb'))
+            #return self._send_put(_url, headers=headers, data=open("pippo.tar.gz", 'rb'))
+
+        return None
 
     def nsd_onboard(self, package):
         token = self.get_token()
@@ -223,6 +253,27 @@ class Client(object):
             return self._send_delete(_url, headers=self._headers)
         return None
 
+    def vnfd_update(self, id, data):
+        token = self.get_token()
+        headers = {}
+        if token:
+            # get the package onboarded
+            tar_pkg = self.get_vnfd_pkg(id)
+            tarf = tarfile.open(fileobj=tar_pkg)
+
+            tarf = self._descriptor_update(tarf, data)
+            headers['Authorization'] = 'Bearer {}'.format(token)
+            headers['Content-Type'] = 'application/gzip'
+            headers['accept'] = 'application/json'
+            headers['Content-File-MD5'] = self.md5(open('/tmp/' + tarf.getnames()[0] + ".tar.gz", 'rb'))
+            # headers['Content-File-MD5'] = self.md5(open("pippo.tar.gz", 'rb'))
+
+            _url = "{0}/vnfpkgm/v1/vnf_packages/{1}/package_content".format(self._base_path, id)
+            return self._send_put(_url, headers=headers, data=open('/tmp/' + tarf.getnames()[0] + ".tar.gz", 'rb'))
+            # return self._send_put(_url, headers=headers, data=open("pippo.tar.gz", 'rb'))
+
+        return None
+
     def vnfd_onboard(self, package):
         token = self.get_token()
         headers = {}
@@ -267,10 +318,21 @@ class Client(object):
             return {'error': 'error during connection to agent'}
         return Util.json_loads_byteified(r.text)
 
+    def _send_put(self, url, data=None, json=None, **kwargs):
+        try:
+            r = requests.put(url, data=data, json=json, verify=False, **kwargs)
+            print r.text
+        except Exception as e:
+            log.exception(e)
+            #print "Exception during send PUT"
+            return {'error': 'error during connection to agent'}
+
+        return r.json
+
     def _send_get(self, url, params=None, **kwargs):
         try:
             r = requests.get(url, params=None, verify=False, stream=True, **kwargs)
-            ##print r.header
+            #print r.headers
         except Exception as e:
             log.exception(e)
             #print "Exception during send GET"
@@ -333,6 +395,24 @@ class Client(object):
             _url = "{0}/vnfpkgm/v1/vnf_packages/{1}/package_content".format(self._base_path, id)
             return self._send_get(_url, headers=self._headers)
         return None
+
+
+
 if __name__ == '__main__':
+
+
     client = Client()
-    package = client.get_nsd_pkg()
+    package = client.get_nsd_pkg('be489dfb-5f15-48c1-b693-67d830c591e5')
+    tarf = tarfile.open(fileobj=package)
+    tarf.extractall('/tmp')
+    yaml_object = yaml.safe_dump({}, default_flow_style=False)
+    yaml_file = open('/tmp/cirros_2vnf_ns/cirros_2vnf_nsd.yaml', 'w')
+    yaml_object = pyaml.dump(yaml_object, yaml_file, safe=True)
+    tarf_temp = tarfile.open(tarf.getnames()[0]+".tar.gz", "w:gz")
+
+    for tarinfo in tarf:
+        tarf_temp.add('/tmp/'+tarinfo.name, tarinfo.name)
+    tarf_temp.close()
+
+
+

@@ -203,13 +203,22 @@ class OsmProject(ProjectStateless):
             log.exception(e)
             result = False
         return result
+
     def edit_descriptor(self, type_descriptor, descriptor_id, new_data, data_type):
         log.debug("Edit descriptor")
         try:
             client = Client()
             if type_descriptor == 'nsd':
+                if data_type == 'yaml':
+                    new_data = yaml.load(new_data)
+                elif data_type == 'json':
+                    new_data = json.loads(new_data)
                 result = client.nsd_update(descriptor_id, new_data)
             elif type_descriptor == 'vnfd':
+                if data_type == 'yaml':
+                    new_data = yaml.load(new_data)
+                elif data_type == 'json':
+                    new_data = json.loads(new_data)
                 result = client.vnfd_update(descriptor_id, new_data)
 
             else:
@@ -219,6 +228,7 @@ class OsmProject(ProjectStateless):
             log.exception(e)
             result = False
         return result
+
     def get_package_files_list(self, type_descriptor, descriptor_id):
         try:
             client = Client()
