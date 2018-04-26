@@ -96,30 +96,30 @@
                                 {% elif i|get:"config-status" == 'running' %}
                                      <td><span class="label label-success">{{ i|get:"config-status"  }}</span> </td>
                                 {% elif i|get:"config-status" == 'configured' %}
-                                          <td><span class="label label-success">{{ i|get:"config-status"  }}</span> </td>
+                                    <td><span class="label label-success">{{ i|get:"config-status"  }}</span> </td>
                                 {% else  %}
                                     <td>{{ i|get:"config-status"  }}</td>
                                 {% endif %}
-                                <td style=" max-width:1px; width:20%;overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">{{ i|get:"detailed-status" }}</td>
+                                <td style=" max-width:1px;overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">{{ i|get:"detailed-status" }}</td>
                                 <td>
-
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-default">Action</button>
-                                        <button type="button" class="btn btn-default dropdown-toggle"
-                                                data-toggle="dropdown"
-                                                aria-expanded="false">
-                                            <span class="caret"></span>
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li>
-                                                <a href="javascript:showInstanceDetails('{{ i|get:"_id" }}')"><i class="fa fa-info fa-fw"></i>info</a></li>
-                                            <li class="divider"></li>
-                                            <li>
-                                                <a href="javascript:deleteNs('{{ i|get:"_id" }}')"><i class="fa fa-trash-o fa-fw"></i>Delete</a></li>
-                                        </ul>
+                                    <button type="button" class="btn btn-default"
+                                                onclick="javascript:showInstanceDetails('{{ i|get:"_id" }}')" data-toggle="tooltip" data-placement="top" title="Show Info"><i
+                                                class="fa fa-info"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default"
+                                                onclick="javascript:performAction('{{ i|get:"_id" }}')" data-toggle="tooltip" data-placement="top" title="Perform Action"><i
+                                                class="fa fa-magic"></i>
+                                    </button>
+                                        <button type="button" class="btn btn-default"
+                                                onclick="javascript:deleteNs('{{ i|get:"_id" }}')" data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                                class="fa fa-trash-o" ></i></button>
+
+
+
                                     </div>
                                 </td>
+
 
                             </tr>
                         {% endfor %}
@@ -131,6 +131,7 @@
 
     </div>
 {% include 'modal/instance_show.html' %}
+{% include 'modal/instance_new_action.html' %}
 {% endblock %}
 
 {% block resource_block %}
@@ -152,7 +153,9 @@
     <script src="/static/bower_components/codemirror/keymap/sublime.js"></script>
 
 <script>
-
+    function performAction(ns_uuid) {
+        $('#modal_instance_new_action').modal('show')
+    }
 
     function deleteNs(ns_uuid) {
         bootbox.confirm("Are you sure want to delete?", function (result) {
@@ -186,40 +189,64 @@
             }
         });
     }
+
     var editorJSON;
 
     $(document).ready(function () {
         var json_editor_settings = {
-        mode: "javascript",
-        showCursorWhenSelecting: true,
-        autofocus: true,
-        lineNumbers: true,
-        lineWrapping: true,
-        foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-        autoCloseBrackets: true,
-        matchBrackets: true,
-        extraKeys: {
-            "F11": function (cm) {
-                cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+            mode: "javascript",
+            showCursorWhenSelecting: true,
+            autofocus: true,
+            lineNumbers: true,
+            lineWrapping: true,
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            extraKeys: {
+                "F11": function (cm) {
+                    cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+                },
+                "Esc": function (cm) {
+                    if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+                },
+                "Ctrl-Q": function (cm) {
+                    cm.foldCode(cm.getCursor());
+                }
             },
-            "Esc": function (cm) {
-                if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-            },
-            "Ctrl-Q": function (cm) {
-                cm.foldCode(cm.getCursor());
-            }
-        },
-        theme: "neat",
-        keyMap: "sublime",
-    };
+            theme: "neat",
+            keyMap: "sublime"
+        };
         var myJsonTextArea = document.getElementById("instance_view_json");
         editorJSON = CodeMirror(function (elt) {
             myJsonTextArea.parentNode.replaceChild(elt, myJsonTextArea);
         }, json_editor_settings);
 
+        var addFormGroup = function (event) {
+            event.preventDefault();
 
-        //
+            var $formGroup = $(this).closest('.form-group');
+            var $formGroupClone = $formGroup.clone();
+
+            $(this)
+                .toggleClass('btn-success btn-add btn-danger btn-remove')
+                .html('–');
+
+            $formGroupClone.find('input').val('');
+            $formGroupClone.insertAfter($formGroup);
+
+        };
+
+        var removeFormGroup = function (event) {
+            event.preventDefault();
+            var $formGroup = $(this).closest('.form-group');
+            $formGroup.remove();
+        };
+
+
+        $(document).on('click', '.btn-add', addFormGroup);
+        $(document).on('click', '.btn-remove', removeFormGroup);
+
     });
 </script>
 

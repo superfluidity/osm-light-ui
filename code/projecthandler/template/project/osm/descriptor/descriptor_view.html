@@ -53,15 +53,14 @@ Edit {{ descriptor_type }} Descriptor
 
 <!-- /.tab-pane -->
 <div class="active tab-pane" id="yaml">
-			<textarea id="code_editor_yaml">
-            </textarea>
+    <textarea id="code_editor_yaml">
+    </textarea>
 </div>
 <!-- /.tab-pane-->
 
 <div class="tab-pane" id="json">
-                    <textarea id="code_editor_json">
-
-                    </textarea>
+    <textarea id="code_editor_json">
+    </textarea>
 </div>
 
 {% endblock %}
@@ -71,74 +70,71 @@ Edit {{ descriptor_type }} Descriptor
 
 
 <script>
-var editorJSON;
-var editorYaml;
+    var editorJSON;
+    var editorYaml;
 
-$(document).ready(function () {
-   //var cmjsoneditor = CodeMirror.fromTextArea(document.getElementById("code_editor"), json_editor_settings);
-   var myJsonTextArea = document.getElementById("code_editor_json");
-   editorJSON = CodeMirror(function(elt) {
-                    myJsonTextArea.parentNode.replaceChild(elt, myJsonTextArea);
-                }, json_editor_settings );
-
-
-   editorJSON.setValue(JSON.stringify({{ descriptor_strings.descriptor_string_json |safe }}, null,"\t"));
-   editorJSON.setOption("autoRefresh", true);
-   var myYamlTextArea = document.getElementById("code_editor_yaml");
-   editorYaml = CodeMirror(function(elt) {myYamlTextArea.parentNode.replaceChild(elt, myYamlTextArea);
-                }, yaml_editor_settings);
-   var des_strings = {{ descriptor_strings|safe }};
-   editorYaml.setValue(des_strings.descriptor_string_yaml);
+    $(document).ready(function () {
+        //var cmjsoneditor = CodeMirror.fromTextArea(document.getElementById("code_editor"), json_editor_settings);
+        var myJsonTextArea = document.getElementById("code_editor_json");
+        editorJSON = CodeMirror(function (elt) {
+            myJsonTextArea.parentNode.replaceChild(elt, myJsonTextArea);
+        }, json_editor_settings);
 
 
-});
+        editorJSON.setValue(JSON.stringify({{descriptor_strings.descriptor_string_json | safe}}, null, "\t"));
+        editorJSON.setOption("autoRefresh", true);
+        var myYamlTextArea = document.getElementById("code_editor_yaml");
+        editorYaml = CodeMirror(function (elt) {
+            myYamlTextArea.parentNode.replaceChild(elt, myYamlTextArea);
+        }, yaml_editor_settings);
+        var des_strings = {{descriptor_strings | safe}};
+        editorYaml.setValue(des_strings.descriptor_string_yaml);
+
+    });
 
 
+    function update(e) {
+        var dialog = bootbox.dialog({
+            message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+            closeButton: false
+        });
 
-function update(e){
-            console.log(e);
-            var id = $('.nav-tabs .active').attr('id');
-            var type, text ;
-            switch(id) {
-                case 'yaml_li':
-                    type = 'yaml';
-                    text = editorYaml.getValue();
-                    break;
-                case 'json_li':
-                    type = 'json';
-                    text = editorJSON.getValue();
-                    break;
-                case 'form_li':
-                    type = 'file'
-                    return;
-                    break;
-            }
-            $.ajax({
-                    url: "/projects/{{project_id}}/descriptors/{{descriptor_type}}/{{descriptor_id}}/",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: { 'csrfmiddlewaretoken' : '{{csrf_token}}',
-                            'type': type,
-                            'text': text
-                     },
-                    success: function(result) {
-                        /*if(e =='save'){
-                            window.location.href="/projects/{{project_id}}/descriptors/{{descriptor_type}}"
-                        }else{
-                            goToGraph();
-                        }*/
-
-                    },
-                    error: function(result) {
-                        console.log(result)
-                        showAlert(result);
-                    }
-                });
+        var id = $('.nav-tabs .active').attr('id');
+        var type, text;
+        switch (id) {
+            case 'yaml_li':
+                type = 'yaml';
+                text = editorYaml.getValue();
+                break;
+            case 'json_li':
+                type = 'json';
+                text = editorJSON.getValue();
+                break;
         }
+        $.ajax({
+            url: "/projects/{{project_id}}/descriptors/{{descriptor_type}}/{{descriptor_id}}/",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'csrfmiddlewaretoken': '{{csrf_token}}',
+                'type': type,
+                'text': text
+            },
+            success: function (result) {
+                dialog.modal('hide');
 
-function goToGraph(){
-    window.location.href='/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{descriptor_id}}'
-}
+            },
+            error: function (result) {
+                console.log(result);
+                dialog.modal('hide');
+                bootbox.alert(result);
+            }
+        });
+    }
+
+    function goToGraph() {
+        window.location.href = '/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{descriptor_id}}'
+    }
 
 
 </script>
