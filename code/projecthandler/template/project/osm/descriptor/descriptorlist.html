@@ -10,7 +10,7 @@
 
                 <a href="{% url 'projects:new_descriptor' project_id=project_id descriptor_type=descriptor_type %}"
                    class="btn btn-block btn-primary btn-sm"><i
-                        class="fa fa-upload"></i><span> Onboard {{descriptor_type}}</span></a>
+                        class="fa fa-upload"></i><span> Onboard {{descriptor_type|upper}}</span></a>
             </div>
         </div>
         <div class="box-body">

@@ -5,7 +5,7 @@
 
 {% block title_header_big %}
 {{ block.super }}
-Edit {{ descriptor_type }} Descriptor
+Edit {{ descriptor_type|upper }} Descriptor
 {% endblock %}
 
 
@@ -116,11 +116,6 @@ Edit {{ descriptor_type }} Descriptor
             }
         });
     }
-
-    function goToGraph() {
-        window.location.href = '/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{descriptor_id}}'
-    }
-
 
 </script>
 {% endblock %}

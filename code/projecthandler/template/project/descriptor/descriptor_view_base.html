@@ -72,7 +72,7 @@
 
     <script>
 
-    var json_editor_settings = {
+        var json_editor_settings = {
             mode: "javascript",
             showCursorWhenSelecting: true,
             autofocus: true,
@@ -83,49 +83,49 @@
             autoCloseBrackets: true,
             matchBrackets: true,
             extraKeys: {
-                "F11": function(cm) {
+                "F11": function (cm) {
                     cm.setOption("fullScreen", !cm.getOption("fullScreen"));
                 },
-                "Esc": function(cm) {
+                "Esc": function (cm) {
                     if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
                 },
-                "Ctrl-Q": function(cm) {
+                "Ctrl-Q": function (cm) {
                     cm.foldCode(cm.getCursor());
                 }
             },
             theme: "neat",
-            keyMap: "sublime",
-        }
+            keyMap: "sublime"
+        };
 
-    var yaml_editor_settings = {
-                mode: "yaml",
-                showCursorWhenSelecting: true,
-                autofocus: true,
-                autoRefresh: true,
-                lineNumbers: true,
-                lineWrapping: true,
-                foldGutter: true,
-                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-                autoCloseBrackets: true,
-                matchBrackets: true,
-                extraKeys: {
-                    "F11": function(cm) {
-                        cm.setOption("fullScreen", !cm.getOption("fullScreen"));
-                    },
-                    "Esc": function(cm) {
-                        if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-                    },
-                    "Ctrl-Q": function(cm) {
-                        cm.foldCode(cm.getCursor());
-                    }
+        var yaml_editor_settings = {
+            mode: "yaml",
+            showCursorWhenSelecting: true,
+            autofocus: true,
+            autoRefresh: true,
+            lineNumbers: true,
+            lineWrapping: true,
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            extraKeys: {
+                "F11": function (cm) {
+                    cm.setOption("fullScreen", !cm.getOption("fullScreen"));
                 },
-                theme: "neat",
-                keyMap: "sublime",
-            };
+                "Esc": function (cm) {
+                    if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+                },
+                "Ctrl-Q": function (cm) {
+                    cm.foldCode(cm.getCursor());
+                }
+            },
+            theme: "neat",
+            keyMap: "sublime"
+        };
 
 
-function goToGraph(){
-    window.location.href='/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{descriptor_id}}'
-}
+        function goToGraph() {
+            window.location.href = '/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{descriptor_id}}'
+        }
     </script>
 {% endblock %}
