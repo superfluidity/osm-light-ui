@@ -217,28 +217,6 @@ def graph_data(request, project_id=None, descriptor_id=None):
 
 
 @login_required
-def download(request, project_id=None):
-    csrf_token_value = get_token(request)
-    projects = Project.objects.filter(id=project_id).select_subclasses()
-    if request.method == 'POST':
-        # projects = EtsiProject.objects.filter(id=project_id)
-        in_memory = projects[0].get_zip_archive()
-
-        response = HttpResponse(content_type="application/zip")
-        response["Content-Disposition"] = "attachment; filename=export_" + project_id + ".zip"
-        ret_zip = in_memory.getvalue()
-        in_memory.close()
-        response.write(ret_zip)
-        return response
-
-    elif request.method == 'GET':
-        return render(request, 'download.html', {
-            'project_id': project_id,
-            'project_overview_data': projects[0].get_overview_data(),
-        })
-
-
-@login_required
 def delete_descriptor(request, project_id=None, descriptor_type=None, descriptor_id=None):
     csrf_token_value = get_token(request)
     projects = Project.objects.filter(id=project_id).select_subclasses()
@@ -506,6 +484,7 @@ def get_package_files_list(request, project_id, project, descriptor_id, descript
         url = 'error.html'
         result = {'error_msg': 'Unknown error.'}
     return __response_handler(request, result)
+
 
 def download_pkg(request, project_id, project, descriptor_id, descriptor_type):
     tar_pkg = project.download_pkg(project, descriptor_id, descriptor_type)

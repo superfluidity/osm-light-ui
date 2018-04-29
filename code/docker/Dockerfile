@@ -11,8 +11,6 @@ RUN bower install --allow-root
 RUN pip install -r requirements.txt
 
 
-# fix pbr-based packages versioning
-#RUN echo "__version__ = '0.0.1'" | tee toscaparser/__init__.py | tee translator/__init__.py
 # delete the copy of the database inside the container (if exists)
 RUN rm -f db.sqlite3
 
