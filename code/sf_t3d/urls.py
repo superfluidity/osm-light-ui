@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^register', user_views.register_view, name='register_user'),
     url(r'^projects/', include('projecthandler.urls.project', namespace='projects'), name='projects_base'),
     url(r'^vims/', include('vimhandler.urls', namespace='vim'), name='vims_base'),
-    url(r'^instances/', include('instancehandler.urls', namespace='instances'), name='instances_base'),
+
     url(r'^$', views.home, name='home'),
     url(r'^home', views.home, name='home'),
     url(r'^forbidden', views.forbidden, name='forbidden'),

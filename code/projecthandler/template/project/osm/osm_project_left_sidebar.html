@@ -40,7 +40,7 @@
             </li>
             {% url "instances:list"  type='ns' as  instance_ns_list_url %}
             <li {% if request.get_full_path == instance_ns_list_url %} class="active" {% endif %} >
-                <a href='{% url "instances:list"  type="ns"%}'>
+                <a href='{% url "projects:instances:list" project_id=project_id  type="ns"%}'>
                     <i class="fa fa-list fa-fw"></i><span>NS Instances</span>
                 </a>
             </li>

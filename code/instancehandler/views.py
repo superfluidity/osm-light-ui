@@ -7,45 +7,64 @@ from lib.osm.osmclient.client import Client
 
 
 @login_required
-def list(request, type=None):
-
+def list(request, project_id=None, type=None):
     client = Client()
     if type == 'ns':
         result = client.ns_list()
 
-    return __response_handler(request, {'instances': result, 'type': 'ns'}, 'instance_list.html')
+    return __response_handler(request, {'instances': result, 'type': 'ns', 'project_id': project_id}, 'instance_list.html')
+
 
 @login_required
-def create(request):
-
+def create(request, project_id=None):
     result = {}
-    ns_data={
-      "nsName": request.POST.get('nsName', 'WithoutName'),
-      "nsDescription": request.POST.get('nsDescription', ''),
-      "nsdId": request.POST.get('nsdId', ''),
-      "vimAccountId": request.POST.get('vimAccountId', ''),
-      "ssh-authorized-key": [
-        {
-          request.POST.get('key-pair-ref', ''): request.POST.get('keyValue', '')
-        }
-      ]
+    ns_data = {
+        "nsName": request.POST.get('nsName', 'WithoutName'),
+        "nsDescription": request.POST.get('nsDescription', ''),
+        "nsdId": request.POST.get('nsdId', ''),
+        "vimAccountId": request.POST.get('vimAccountId', ''),
+        "ssh-authorized-key": [
+            {
+                request.POST.get('key-pair-ref', ''): request.POST.get('keyValue', '')
+            }
+        ]
     }
     print ns_data
     client = Client()
     result = client.ns_create(ns_data)
-    return  __response_handler(request, result, 'instances:list', to_redirect=True, type='ns')
+    return __response_handler(request, result, 'projects:instances:list', to_redirect=True, type='ns', project_id=project_id)
+
 
 @login_required
-def delete(request, instance_id=None, type=None):
+def action(request, project_id=None, instance_id=None, type=None):
+    result = {}
+    client = Client()
+
+    # result = client.ns_action(instance_id, action_payload)
+    primitive_param_keys = request.POST.getlist('primitive_params_name')
+    primitive_param_value = request.POST.getlist('primitive_params_value')
+    action_payload = {
+        "vnf_member_index": request.POST.get('vnf_member_index'),
+        "primitive": request.POST.get('primitive'),
+        "primitive_params": {k: v for k, v in zip(primitive_param_keys, primitive_param_value) if len(k) > 0}
+    }
+
+    result = client.ns_action(instance_id, action_payload)
+    return __response_handler(request, result, 'projects:instances:list', to_redirect=True, type='ns', project_id=project_id)
+
+
+@login_required
+def delete(request, project_id=None, instance_id=None, type=None):
     result = {}
     client = Client()
     result = client.ns_delete(instance_id)
     print result
-    return __response_handler(request, result, 'instances:list', to_redirect=True, type='ns')
+    return __response_handler(request, result, 'projects:instances:list', to_redirect=True, type='ns', project_id=project_id)
+
 
 @login_required
-def show(request, instance_id=None, type=None):
-    #result = {}
+def show(request, project_id=None, instance_id=None, type=None):
+    # result = {}
     client = Client()
     result = client.ns_get(instance_id)
     print result

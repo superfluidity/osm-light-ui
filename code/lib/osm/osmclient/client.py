@@ -15,8 +15,7 @@ log = logging.getLogger('helper.py')
 
 class Client(object):
     def __init__(self, host=os.getenv('OSM_SERVER', "localhost"), so_port=9999, so_project='admin', ro_host=None, ro_port=9090, **kwargs):
-#os.getenv('OSM_SERVER', "localhost")
-        ##print os.getenv('OSM_SERVER',"40.86.191.138")
+
         self._user = 'admin'
         self._password = 'admin'
         # self._project = so_project
@@ -221,6 +220,19 @@ class Client(object):
             self._headers['accept'] = 'application/json'
             _url = "{0}/nslcm/v1/ns_instances_content/{1}".format(self._base_path, id)
             return self._send_delete(_url, headers=self._headers)
+        return None
+
+    def ns_action(self, id, action_payload):
+        token = self.get_token()
+        headers = {}
+        if token:
+            headers['Authorization'] = 'Bearer {}'.format(token)
+            headers['Content-Type'] = 'application/json'
+            headers['accept'] = 'application/json'
+
+            _url = "{0}/nslcm/v1/ns_instances/{1}/action".format(self._base_path, id)
+            return self._send_post(_url, headers=headers,
+                                   json=action_payload)
         return None
 
     def vnfd_list(self):
