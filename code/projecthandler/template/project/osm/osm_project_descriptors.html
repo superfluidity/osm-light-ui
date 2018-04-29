@@ -1,22 +1,7 @@
 {% extends "project_descriptors.html" %}
 {% load staticfiles %}
 
-{% block head_base %}
-    {% with skin_css="AdminLTE/dist/css/skins/skin-purple.min.css"%}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
 
-{% block body %}
-    {% with skin="purple"%}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-{% block logo_sidebar %}
-    {% with logo_mini="assets/img/osm_small_logo.png" logo="assets/img/OSM-logo.png"%}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
 {% block head_block %}
   	{{ block.super }}
 
@@ -103,7 +88,7 @@ function build_file_list(title,list){
     $('#files_list_tbody').find('tr:gt(0)').remove();
     $('#files_list_tbody_title').text(title)
     for(var i in list){
-        var template = '<tr><td>-</td><td>'+list[i]+'</td><td><button type="button" class="btn btn-default" onclick=""><i class="fa fa-folder-open"></i></button></td></tr>'
+        var template = '<tr><td>-</td><td>'+list[i]+'</td><td><button type="button" class="btn btn-default" onclick="" disabled><i class="fa fa-folder-open"></i></button></td></tr>'
         $('#files_list_tbody').append(template)
     }
     $('#modal_files_list').modal('show');
