@@ -1,76 +1,10 @@
-function loadDataOptionsSelector(args){
-    var select_container = args.select_container;
-    var select = args.select;
-    var url = args.url;
-    var value_key = args.value_key || 'value';
-    var text_key = args.text_key || 'text';
-    select_container.toggleClass("select-container-rdcl-loaded", false);
-    select_container.toggleClass("select-container-rdcl-loading", true);
-
-    var items = [];
-    $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function(result) {
-                console.log(args.expect + "--" +JSON.stringify(result))
-                $.each(result[args.expect], function (i, item) {
-                    console.log(i, item)
-                    select.append($('<option>', {
-                        value: item[value_key],
-                        text : item[text_key]
-                    }));
-
-                });
-            },
-            error: function(result) {
-                showAlert(result)
-                console.log("some error: " + JSON.stringify(result));
-            }
-    });
-
-    $.each(items, function (i, item) {
-        select.append($('<option>', {
-            value: item.value,
-            text : item.text
-        }));
-
-    });
-
-    select_container.toggleClass("select-container-rdcl-loaded", true);
-    select_container.toggleClass("select-container-rdcl-loading", false);
-}
-
-function openModalDeployment(descId){
-    var modalId = "modal_launch_deploy";
-    $("input[name='descId[]']").remove()
-    descId.forEach(function(id){
-        $('#desc_list').append('<input type="hidden" class="form-control"  name="descId[]" value="'+id+'">')
-    });
-    //show modal
-    $('#'+modalId).modal('show')
-}
-
-function openModalPush(descId){
-    var modalId = "modal_launch_push";
-    $("input[name='descId']").remove()
-    //descId.forEach(function(id){
-    $('#desc_list_push').append('<input type="hidden" class="form-control"  name="descId" value="'+descId+'">')
-    //});
-    //show modal
-    $('#'+modalId).modal('show')
-}
-
 function generateUID() {
     return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4)
 }
 
-function openProject(pId){
-    window.location.href='/projects/' + pId;
+function openProject(pId) {
+    window.location.href = '/projects/' + pId;
 }
-
-
 
 
 function openDescriptorView(project_id, descriptor_type, descriptor_id) {
@@ -79,28 +13,8 @@ function openDescriptorView(project_id, descriptor_type, descriptor_id) {
 
 }
 
-function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-}
 
-function createNewDescriptor(project_id, descriptor_type) {
-    var type_capitalized = toTitleCase(descriptor_type)
-
-    $("#modal_chooser_new_descriptor_name").text("New " + type_capitalized + " Descriptor");
-    $("#input_choose_new_descriptor_name").val(descriptor_type + "_" + generateUID());
-
-
-    $('#save_new_descriptor_name').off('click').on('click', function () {
-        var descriptor_id = $("#input_choose_new_descriptor_name").val();
-        window.location.href = '/projects/' + project_id + '/descriptors/' + descriptor_type + '/new?id=' + descriptor_id;
-    });
-    $('#modal_new_descriptor_name').modal('show');
-
-}
-
-function openEditorEvent(e, id){
+function openEditorEvent(e, id) {
     openEditor(id);
 }
 
@@ -133,18 +47,21 @@ function buildPalette(args) {
                 console.log(graph_editor.get_name_from_d3_symbol(d3.symbolCircle))
                 var type_id = type.id.replace(/[\s.*+?^${}()|[\]\\]/g, "_");
                 var palette_node_icon;
-                if(type_property[type.id] && type_property[type.id].image && type_property[type.id].image != ''){
+                if (type_property[type.id] && type_property[type.id].image && type_property[type.id].image != '') {
                     palette_node_icon = '<div class="palette-node-icon" style="background-image: url(' + (type_property[type.id].image || "") + ')"></div>';
                 }
-                else if(type_property[type.id] && type_property[type.id].shape){
-                    palette_node_icon = buildHtmlShape({shape: type_property[type.id].shape, color: type_property[type.id].color});
+                else if (type_property[type.id] && type_property[type.id].shape) {
+                    palette_node_icon = buildHtmlShape({
+                        shape: type_property[type.id].shape,
+                        color: type_property[type.id].color
+                    });
 
                 }
-                else{//#1F77B4
+                else {//#1F77B4
                     palette_node_icon = '<div class="palette-node-icon"> <div class="palette-node-square" style="background:#1F77B4;"></div></div>';
                 }
 
-                var html_to_append = '<div class="palette-node ui-draggable" draggable="true" type-name="'+ type.id +'" id="' + type_id + '" ondragstart="nodeDragStart(event)">' +
+                var html_to_append = '<div class="palette-node ui-draggable" draggable="true" type-name="' + type.id + '" id="' + type_id + '" ondragstart="nodeDragStart(event)">' +
                     '<div class="palette-node-label">' + type.name + '</div>' +
                     '<div class="palette-node-icon-container">' +
                     palette_node_icon +
@@ -191,33 +108,35 @@ function getUrlParameter(par_name) {
     }
 }
 
-function buildHtmlShape(args){
+function buildHtmlShape(args) {
     var mySymbol = args.shape;
-            switch (mySymbol) {
-            case d3.symbolCircle:
-                return '<div class="palette-node-icon"> <div class="palette-node-circle" style="background:'+args.color+';"></div></div>';
-                break;
-            case d3.symbolSquare:
-                return '<div class="palette-node-icon"> <div class="palette-node-square" style="background:'+args.color+';"></div></div>';
-                break;
-            case d3.symbolDiamond:
-                return '<div class="palette-node-icon" style="background-color:' + args.color + '"></div>';;
-                break;
-            case d3.symbolTriangle:
-                return '<div class="palette-node-icon"> <div class="palette-node-triangle" style="border-color: transparent transparent '+args.color+' transparent;"></div></div>';
-                break;
-            case d3.symbolStar:
-                return '<div class="palette-node-icon" style="background-color:' + args.color + '"></div>';;
-                break;
-            case d3.symbolCross:
-                return '<div class="palette-node-icon" style="background-color:' + args.color + '"></div>';;
-                break;
-            default:
-                // if the string is not recognized
-                return "unknown";
-                //return d3.symbolCircleUnknown;
-            }
-
+    switch (mySymbol) {
+        case d3.symbolCircle:
+            return '<div class="palette-node-icon"> <div class="palette-node-circle" style="background:' + args.color + ';"></div></div>';
+            break;
+        case d3.symbolSquare:
+            return '<div class="palette-node-icon"> <div class="palette-node-square" style="background:' + args.color + ';"></div></div>';
+            break;
+        case d3.symbolDiamond:
+            return '<div class="palette-node-icon" style="background-color:' + args.color + '"></div>';
+            ;
+            break;
+        case d3.symbolTriangle:
+            return '<div class="palette-node-icon"> <div class="palette-node-triangle" style="border-color: transparent transparent ' + args.color + ' transparent;"></div></div>';
+            break;
+        case d3.symbolStar:
+            return '<div class="palette-node-icon" style="background-color:' + args.color + '"></div>';
+            ;
+            break;
+        case d3.symbolCross:
+            return '<div class="palette-node-icon" style="background-color:' + args.color + '"></div>';
+            ;
+            break;
+        default:
+            // if the string is not recognized
+            return "unknown";
+        //return d3.symbolCircleUnknown;
+    }
 
 
 }
