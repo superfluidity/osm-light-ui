@@ -37,29 +37,20 @@
                     <td>
                         <div class="btn-group">
                             {% if descriptor_type == "nsd" %}
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Instantiate NS" onclick="javascript:openModalCreateNS('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-paper-plane"></i></button>
+                            <button type="button" class="btn btn-default" data-container="body" data-toggle="tooltip" data-placement="top" title="Instantiate NS" onclick="javascript:openModalCreateNS('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-paper-plane"></i></button>
                             {% endif %}
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Edit" onclick="javascript:openDescriptorView('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-edit"></i></button>
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Show content" onclick="javascript:openPackageContentList('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-folder-open"></i></button>
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Show Graph" onclick="location.href='/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{ k|get:"_id" }}'" disabled><i class="fa fa-sitemap fa-fw"></i></button>
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Download package" onclick="location.href='{% url 'projects:custom_action' project_id=project_id descriptor_type=descriptor_type descriptor_id=k|get:'_id' action_name='download_pkg' %}'"><i class="fa fa-download fa-fw"></i></button>
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Delete" onclick="javascript:deletePackage('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-trash-o"></i></button>
+                            <button type="button" class="btn btn-default" data-container="body" data-toggle="tooltip" data-placement="top" title="Edit" onclick="javascript:openDescriptorView('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-default" data-container="body" data-toggle="tooltip" data-placement="top" title="Show content" onclick="javascript:openPackageContentList('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-folder-open"></i></button>
+                            <button type="button" class="btn btn-default" data-container="body" data-toggle="tooltip" data-placement="top" title="Show Graph" onclick="location.href='/projects/{{project_id}}/graph?type={{descriptor_type}}&id={{ k|get:"_id" }}'" disabled><i class="fa fa-sitemap fa-fw"></i></button>
+                            <button type="button" class="btn btn-default" data-container="body" data-toggle="tooltip" data-placement="top" title="Download package" onclick="location.href='{% url 'projects:custom_action' project_id=project_id descriptor_type=descriptor_type descriptor_id=k|get:'_id' action_name='download_pkg' %}'"><i class="fa fa-download fa-fw"></i></button>
+                            <button type="button" class="btn btn-default" data-container="body" data-toggle="tooltip" data-placement="top" title="Delete" onclick="javascript:deletePackage('{{project_id}}', '{{descriptor_type}}', '{{ k|get:"_id" }}')"><i class="fa fa-trash-o"></i></button>
                         </div>
 
                     </td>
                 </tr>
                 {% endfor %}
                 </tbody>
-            <tfoot>
-                  <tr role="row">
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Vendor</th>
-                      <th>Version</th>
-                    <th>Actions</th>
-                  </tr>
-                  </tfoot>
+
             </table>
         </div>
     </div>

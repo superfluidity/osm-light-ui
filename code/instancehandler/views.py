@@ -39,11 +39,11 @@ def create(request, project_id=None):
         "nsDescription": request.POST.get('nsDescription', ''),
         "nsdId": request.POST.get('nsdId', ''),
         "vimAccountId": request.POST.get('vimAccountId', ''),
-        "ssh-authorized-key": [
-            {
-                request.POST.get('key-pair-ref', ''): request.POST.get('keyValue', '')
-            }
-        ]
+        # "ssh-authorized-key": [
+        #     {
+        #         request.POST.get('key-pair-ref', ''): request.POST.get('keyValue', '')
+        #     }
+        # ]
     }
     print ns_data
     client = Client()

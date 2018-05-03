@@ -89,13 +89,13 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default"
                                                 onclick="javascript:showInstanceDetails('{% url 'projects:instances:show' instance_id=i|get:'_id' project_id=project_id type=type %}')"
-                                                data-toggle="tooltip" data-placement="top" title="Show Info"><i
+                                                data-toggle="tooltip" data-placement="top" data-container="body" title="Show Info"><i
                                                 class="fa fa-info"></i>
                                         </button>
 
                                         <button type="button" class="btn btn-default"
                                                 onclick="javascript:deleteNs('{% url 'projects:instances:delete' instance_id=i|get:'_id' project_id=project_id type=type %}')"
-                                                data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                                data-toggle="tooltip" data-placement="top" data-container="body" title="Delete"><i
                                                 class="fa fa-trash-o"></i></button>
 
                                             <button type="button" class="btn btn-default dropdown-toggle"
@@ -103,8 +103,8 @@
                                                 <span class="fa fa-caret-down"></span></button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#" onclick="javascript:performAction('{% url 'projects:instances:action' instance_id=i|get:'_id' project_id=project_id type=type %}')">
-                                                    <i class="fa fa-magic"></i>Perform Action</a></li>
-                                                <li><a href="#"> <i class="fa fa-list"></i>List of actions</a></li>
+                                                    <i class="fa fa-magic"></i>Exec NS Primitive</a></li>
+                                                <li><a href="#"> <i class="fa fa-list"></i>Active operations</a></li>
                                             </ul>
 
 
