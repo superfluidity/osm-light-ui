@@ -1,22 +1,7 @@
 {% extends "base.html" %}
 {% load get %}
 {% load staticfiles %}
-{% block head_base %}
-    {% with skin_css="AdminLTE/dist/css/skins/skin-purple.min.css" %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
 
-{% block body %}
-    {% with skin="purple" %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-{% block logo_sidebar %}
-    {% with logo_mini="assets/img/osm_small_logo.png" logo="assets/img/OSM-logo.png" %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
 
 
 {% block head_block %}
@@ -65,10 +50,10 @@
                             <th>Id</th>
                             <th>Name</th>
                             <th>Nsd name</th>
-                            <th>Operational Status</th>
-                            <th>Config Status</th>
+                            <th style="width:5%">Operational Status</th>
+                            <th style="width:5%">Config Status</th>
                             <th>Detailed Status</th>
-                            <th>Actions</th>
+                            <th >Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -102,21 +87,29 @@
                                 <td style=" max-width:1px;overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">{{ i|get:"detailed-status" }}</td>
                                 <td>
                                     <div class="btn-group">
-                                    <button type="button" class="btn btn-default"
-                                                onclick="javascript:showInstanceDetails('{% url 'projects:instances:show' instance_id=i|get:'_id' project_id=project_id type=type %}')" data-toggle="tooltip" data-placement="top" title="Show Info"><i
-                                                class="fa fa-info"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default"
-                                                onclick="javascript:performAction('{% url 'projects:instances:action' instance_id=i|get:'_id' project_id=project_id type=type %}')" data-toggle="tooltip" data-placement="top" title="Perform Action"><i
-                                                class="fa fa-magic"></i>
-                                    </button>
                                         <button type="button" class="btn btn-default"
-                                                onclick="javascript:deleteNs('{% url 'projects:instances:delete' instance_id=i|get:'_id' project_id=project_id type=type %}')" data-toggle="tooltip" data-placement="top" title="Delete"><i
-                                                class="fa fa-trash-o" ></i></button>
+                                                onclick="javascript:showInstanceDetails('{% url 'projects:instances:show' instance_id=i|get:'_id' project_id=project_id type=type %}')"
+                                                data-toggle="tooltip" data-placement="top" title="Show Info"><i
+                                                class="fa fa-info"></i>
+                                        </button>
 
+                                        <button type="button" class="btn btn-default"
+                                                onclick="javascript:deleteNs('{% url 'projects:instances:delete' instance_id=i|get:'_id' project_id=project_id type=type %}')"
+                                                data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                                class="fa fa-trash-o"></i></button>
+
+                                            <button type="button" class="btn btn-default dropdown-toggle"
+                                                    data-toggle="dropdown" aria-expanded="false">Actions
+                                                <span class="fa fa-caret-down"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#" onclick="javascript:performAction('{% url 'projects:instances:action' instance_id=i|get:'_id' project_id=project_id type=type %}')">
+                                                    <i class="fa fa-magic"></i>Perform Action</a></li>
+                                                <li><a href="#"> <i class="fa fa-list"></i>List of actions</a></li>
+                                            </ul>
 
 
                                     </div>
+
                                 </td>
 
 
@@ -150,103 +143,7 @@
     <script src="/static/bower_components/codemirror/addon/edit/closebrackets.js"></script>
     <script src="/static/bower_components/codemirror/addon/display/fullscreen.js"></script>
     <script src="/static/bower_components/codemirror/keymap/sublime.js"></script>
-
-<script>
-    function performAction(url) {
-        $("#formActionNS").attr("action", url);
-        $('#modal_instance_new_action').modal('show')
-    }
-
-    function deleteNs(url) {
-        bootbox.confirm("Are you sure want to delete?", function (result) {
-            if (result) {
-                location.href = url
-            }
-        })
-    }
-
-    function showInstanceDetails(url_info) {
-        var dialog = bootbox.dialog({
-            message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
-            closeButton: true
-        });
-        $.ajax({
-            url: url_info,
-            type: 'GET',
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (result) {
-                editorJSON.setValue(JSON.stringify(result, null, "\t"));
-                editorJSON.setOption("autoRefresh", true);
-                dialog.modal('hide');
-                $('#modal_show_instance').modal('show');
-            },
-            error: function (result) {
-                dialog.modal('hide');
-                bootbox.alert("An error occurred while retrieving the information for the NS");
-            }
-        });
-    }
-
-    var editorJSON;
-
-    $(document).ready(function () {
-        var json_editor_settings = {
-            mode: "javascript",
-            showCursorWhenSelecting: true,
-            autofocus: true,
-            lineNumbers: true,
-            lineWrapping: true,
-            foldGutter: true,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-            autoCloseBrackets: true,
-            matchBrackets: true,
-            extraKeys: {
-                "F11": function (cm) {
-                    cm.setOption("fullScreen", !cm.getOption("fullScreen"));
-                },
-                "Esc": function (cm) {
-                    if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-                },
-                "Ctrl-Q": function (cm) {
-                    cm.foldCode(cm.getCursor());
-                }
-            },
-            theme: "neat",
-            keyMap: "sublime"
-        };
-        var myJsonTextArea = document.getElementById("instance_view_json");
-        editorJSON = CodeMirror(function (elt) {
-            myJsonTextArea.parentNode.replaceChild(elt, myJsonTextArea);
-        }, json_editor_settings);
-
-        var addFormGroup = function (event) {
-            event.preventDefault();
-
-            var $formGroup = $(this).closest('.form-group');
-            var $formGroupClone = $formGroup.clone();
-
-            $(this)
-                .toggleClass('btn-success btn-add btn-danger btn-remove')
-                .html('–');
-
-            $formGroupClone.find('input').val('');
-            $formGroupClone.insertAfter($formGroup);
-
-        };
-
-        var removeFormGroup = function (event) {
-            event.preventDefault();
-            var $formGroup = $(this).closest('.form-group');
-            $formGroup.remove();
-        };
-
-
-        $(document).on('click', '.btn-add', addFormGroup);
-        $(document).on('click', '.btn-remove', removeFormGroup);
-
-    });
-</script>
+    <script src="/static/src/instancehandler/instance_list.js"></script>
 
 {% endblock %}
 

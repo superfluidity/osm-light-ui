@@ -66,7 +66,7 @@ def action(request, project_id=None, instance_id=None, type=None):
     }
 
     result = client.ns_action(instance_id, action_payload)
-    return __response_handler(request, result, 'projects:instances:list', to_redirect=True, type='ns', project_id=project_id)
+    return __response_handler(request, result, None, to_redirect=False, status=result['status'] )
 
 
 @login_required
@@ -89,8 +89,8 @@ def show(request, project_id=None, instance_id=None, type=None):
 
 def __response_handler(request, data_res, url=None, to_redirect=None, *args, **kwargs):
     raw_content_types = request.META.get('HTTP_ACCEPT', '*/*').split(',')
-    if 'application/json' in raw_content_types:
-        return JsonResponse(data_res)
+    if 'application/json' in raw_content_types or url is None:
+        return JsonResponse(data_res, *args, **kwargs)
     elif to_redirect:
         return redirect(url, *args, **kwargs)
     else:

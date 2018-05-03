@@ -1,23 +1,6 @@
 {% extends "base.html" %}
 {% load get %}
 {% load staticfiles %}
-{% block head_base %}
-    {% with skin_css="AdminLTE/dist/css/skins/skin-purple.min.css"%}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-
-{% block body %}
-    {% with skin="purple"%}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-{% block logo_sidebar %}
-    {% with logo_mini="assets/img/osm_small_logo.png" logo="assets/img/OSM-logo.png" %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-
 
 
 {% block head_block %}
